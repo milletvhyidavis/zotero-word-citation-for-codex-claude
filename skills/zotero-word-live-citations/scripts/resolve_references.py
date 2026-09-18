@@ -34,8 +34,8 @@ from typing import Any, Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _common import (  # noqa: E402
-    DEFAULT_BASE_URL, EXIT_FAIL, EXIT_OK, EXIT_USAGE, NON_CITABLE_TYPES, ZoteroLocal,
-    dump_json, extract_pmid, item_uri, load_json, normalize_doi, normalize_name,
+    DEFAULT_BASE_URL, EXIT_FAIL, EXIT_OK, EXIT_USAGE, NON_CITABLE_TYPES, ZoteroHTTPError,
+    ZoteroLocal, dump_json, extract_pmid, item_uri, load_json, normalize_doi, normalize_name,
     normalize_title, title_similarity, utf8_stdio, year_of, zotero_item_summary,
 )
 
@@ -198,10 +198,15 @@ def resolve_one(ref: dict[str, Any], search: SearchFn, fetch: Callable[[str], di
                 ) -> tuple[str, dict[str, Any]]:
     """Return (status, payload) with status in resolved|missing|ambiguous."""
     if ref.get("zoteroKey"):
-        item = fetch(ref["zoteroKey"])
+        try:
+            item = fetch(ref["zoteroKey"])
+        except ZoteroHTTPError as exc:  # unreachable Zotero still aborts the whole run
+            return "missing", {"reason": f"pinned key {ref['zoteroKey']} not found in this library "
+                                         f"({exc})", "pinnedKey": True}
         s = citable([item])
         if not s:
-            return "missing", {"reason": f"pinned key {ref['zoteroKey']} is not a citable parent item"}
+            return "missing", {"reason": f"pinned key {ref['zoteroKey']} is not a citable parent item",
+                               "pinnedKey": True}
         return "resolved", {"item": s[0], "matchMethod": "manual", "score": 1.0}
 
     for field, method in (("doi", "doi"), ("pmid", "pmid")):
@@ -276,7 +281,9 @@ def resolve_all(refs: list[dict[str, Any]], z: ZoteroLocal, library: str) -> dic
             try:
                 uri = item_uri(s["_raw"])
             except ValueError as exc:
-                report["missing"].append({"refId": rid, "title": ref.get("title"), "reason": str(exc)})
+                # the item IS in the library; only its URI is unusable -> never re-import it
+                report["missing"].append({"refId": rid, "title": ref.get("title"), "reason": str(exc),
+                                          "inLibrary": True, "zoteroKey": s["key"]})
                 continue
             item_data = z.csljson(s["key"], library=library)
             namespaces.add(uri.split("/items/")[0].split("zotero.org/", 1)[1])
@@ -294,6 +301,8 @@ def resolve_all(refs: list[dict[str, Any]], z: ZoteroLocal, library: str) -> dic
                      "doi": ref.get("doi"), "reason": payload["reason"]}
             if payload.get("nearest"):
                 entry["nearest"] = payload["nearest"]
+            if payload.get("pinnedKey"):  # user pinned an item: fix the key, do not import
+                entry["inLibrary"] = True
             report["missing"].append(entry)
     report["libraryNamespaces"] = sorted(namespaces)
     return report

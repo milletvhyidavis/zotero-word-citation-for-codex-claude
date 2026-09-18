@@ -7,6 +7,7 @@ library contents):
   2. Zotero Desktop reachable on the local port (connector ping)
   3. 'Allow other applications to communicate' / local API enabled (/api/)
   4. Local API can list one item key
+  4b. Zotero is signed in to a zotero.org account (numeric user library ID)
   5. Offline DOCX pipeline: build a DOCX, insert a synthetic field, validate it
   6. Microsoft Word present (visual rendering only)
 
@@ -88,11 +89,19 @@ def main(argv: list[str] | None = None) -> int:
     api = z.request("/api/", timeout=3)
     add("zotero-local-api", api.ok,
         "local API enabled" if api.ok else
+        "not checked: start Zotero Desktop first" if not ping.ok else
         "enable Zotero Settings > Advanced > 'Allow other applications on this computer "
         "to communicate with Zotero'")
     items = z.request("/api/users/0/items/top?limit=1&format=keys", timeout=5) if api.ok else None
     add("zotero-read-items", bool(items and items.ok),
         "read one item key" if items and items.ok else "cannot read items")
+    logged_in, user_id = z.login_state() if items and items.ok else (None, None)
+    # only a confirmed "not signed in" is a problem; unknown (Zotero down, empty library) is not
+    add("zotero-logged-in", logged_in is not False,
+        f"signed in (user library {user_id})" if logged_in else
+        "not signed in: Zotero Settings > Sync > sign in to zotero.org and sync once"
+        if logged_in is False else
+        "not checked (Zotero not readable or library empty)")
 
     try:
         ok, detail = check_pipeline()
@@ -106,7 +115,7 @@ def main(argv: list[str] | None = None) -> int:
     by = {c["check"]: c["ok"] for c in checks}
     capabilities = {
         "literatureSearch": True,
-        "zoteroSearchResolve": bool(by["zotero-read-items"]),
+        "zoteroSearchResolve": bool(by["zotero-read-items"]) and logged_in is not False,
         "zoteroImport": bool(by["zotero-running"]),
         "docxInsertValidate": bool(by["docx-pipeline"]),
         "markdownToDocx": bool(by["docx-pipeline"]),

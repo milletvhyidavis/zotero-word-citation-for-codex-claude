@@ -102,6 +102,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: cannot read map: {exc}", file=sys.stderr)
         return EXIT_USAGE
     by_id = {str(r["refId"]): r for r in data.get("references", [])}
+    in_library = {str(m["refId"]): m for m in data.get("missing", []) if m.get("inLibrary")}
     wanted = args.ref_id or [str(m["refId"]) for m in data.get("missing", [])]
     if not wanted:
         print("Nothing to export: no missing references.", file=sys.stderr)
@@ -111,6 +112,9 @@ def main(argv: list[str] | None = None) -> int:
         rec = by_id.get(rid)
         if rid in data.get("resolved", {}):
             skipped.append(f"{rid}: already in Zotero ({data['resolved'][rid]['key']})")
+        elif rid in in_library:
+            skipped.append(f"{rid}: already in Zotero but not citable - "
+                           f"{in_library[rid].get('reason')}; importing would create a duplicate")
         elif not rec or not rec.get("title"):
             skipped.append(f"{rid}: no structured title - look it up with search_literature.py first")
         else:

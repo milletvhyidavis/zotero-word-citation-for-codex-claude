@@ -14,8 +14,8 @@ The agent automates searching, matching, file building, field insertion and vali
   - [B1. Install Python ≥ 3.9](#b1-install-python--39)
   - [B2. Run Zotero Desktop and allow local communication](#b2-run-zotero-desktop-and-allow-local-communication)
   - [B3. Install the Zotero Word add-in](#b3-install-the-zotero-word-add-in)
-  - [B4. Install the citation styles you need](#b4-install-the-citation-styles-you-need)
-  - [B5. Check how your library is synced (group and local-only libraries)](#b5-check-how-your-library-is-synced-group-and-local-only-libraries)
+  - [B4. Citation styles (optional)](#b4-citation-styles-optional)
+  - [B5. Sign in to Zotero (usually already done; fix only when asked)](#b5-sign-in-to-zotero-usually-already-done-fix-only-when-asked)
   - [B6. Optional environment variables](#b6-optional-environment-variables)
   - [B7. Install the skill, start a new session, run the self-test](#b7-install-the-skill-start-a-new-session-run-the-self-test)
 - [For every task](#for-every-task)
@@ -40,11 +40,11 @@ Copy this into your notes and tick it off.
 
 **Before first use (once per computer)**
 
-- [ ] **B1** Python ≥ 3.9 installed, and `python --version` (or `py -3 --version`) works. *Required*
-- [ ] **B2** Zotero Desktop 7+ running; *Allow other applications on this computer to communicate with Zotero* enabled. *Required for matching/importing*
+- [ ] **B1** Python ≥ 3.9 installed (if not, the agent guides you to python.org), and `python --version` (or `py -3 --version`) works. *Required*
+- [ ] **B2** Zotero Desktop 7+ running; *Allow other applications on this computer to communicate with Zotero* enabled, and a **screenshot of the ticked setting sent to the agent**. *Required*
 - [ ] **B3** Zotero Word add-in installed in Microsoft Word; Word restarted. *Required for Refresh*
-- [ ] **B4** Citation styles you need installed in Zotero (e.g. GB/T 7714-2015). *Required for that style*
-- [ ] **B5** Library synced at least once (or you use a group library). *Required if your library is local-only*
+- [ ] **B4** No style needs to be prepared; change it later in Word's Document Preferences. *Optional*
+- [ ] **B5** Zotero is signed in to a zotero.org account (most users already are; the agent tells you if not). *Required only when the agent reports a problem*
 - [ ] **B6** `ZWLC_MAILTO` / `NCBI_API_KEY` set. *Optional*
 - [ ] **B7** Skill installed, new agent session started, `selftest.py` all OK. *Required*
 
@@ -96,7 +96,7 @@ py -3 --version
 > [!TIP]
 > **Codex users** may already have a bundled Python at `~/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python` (`python.exe` on Windows). The skill's instructions allow the agent to use it when no system Python is available.
 
-The agent picks the first of `python3`, `python`, `py -3` that reports version ≥ 3.9. If none works, it asks you to install Python. It will not do it itself.
+The agent picks the first of `python3`, `python`, `py -3` that reports version ≥ 3.9. If none works, the agent **walks you through the install**: it gives you the python.org download link, reminds Windows users to tick *Add python.exe to PATH*, and asks you to reopen the terminal / agent session and confirm the version. It will not install anything itself.
 
 ### B2. Run Zotero Desktop and allow local communication
 
@@ -112,7 +112,8 @@ The agent picks the first of `python3`, `python`, `py -3` that reports version �
 4. Go to **Advanced** (高级). Under **Miscellaneous** (杂项), tick
    **"Allow other applications on this computer to communicate with Zotero"**
    (**"允许此计算机上的其他应用程序与 Zotero 通讯"**).
-5. Close settings. No restart is usually needed. If the check below still fails, restart Zotero.
+5. **Send the agent a screenshot of the settings page with the box ticked.** The local API is required by this skill: the agent checks the screenshot, then confirms with the check below, and will not start matching or importing before that.
+6. Close settings. No restart is usually needed. If the check below still fails, restart Zotero.
 
 **Check.** `$S` is the skill's `scripts/` folder, e.g. `~/.claude/skills/zotero-word-live-citations/scripts` (see [usage.md § Conventions](usage.md#3-conventions-used-below)):
 
@@ -137,13 +138,24 @@ You want `"apiReachable": true` and `"itemsReadable": true`. If `connectorReacha
 
 On macOS, grant any permission prompts Word or Zotero shows. If the tab does not appear, see [troubleshooting.md § Word add-in](troubleshooting.md#zotero-refresh-in-word).
 
-### B4. Install the citation styles you need
+### B4. Citation styles (optional)
 
-**Why.** The skill writes the style ID into the document, e.g. `china-national-standard-gb-t-7714-2015-numeric`. Zotero can only apply it on Refresh if that style is installed.
+**Nothing to prepare.** Change the style anytime after generation in Word → Zotero → **Document Preferences**. The style ID the skill writes is only a starting value; if it is not installed, Zotero tries to download it on Refresh or asks you to pick another.
 
-**How.** Zotero → **Settings → Cite → Styles** (设置 → 引用 → 样式) → **+** / **Get additional styles…** → search, e.g. "GB/T 7714" or your journal's name → install. Check that the style appears in the list.
+**If you want to install a style anyway:** Zotero → **Settings → Cite → Styles** (设置 → 引用 → 样式) → **+** / **Get additional styles…** → search, e.g. "GB/T 7714" or your journal's name → install. Check that the style appears in the list.
 
-### B5. Check how your library is synced (group and local-only libraries)
+### B5. Sign in to Zotero (usually already done; fix only when asked)
+
+**Most users need to do nothing.** The agent checks automatically via `zotero_local.py status` (`"loggedIn"`) or `selftest.py` (`zotero-logged-in`). Only if you are not signed in, or resolving reports *"cannot verify library namespace … local-only/unsynced"*, will it ask you to follow the steps below.
+
+**How (only when the agent asks).**
+
+1. If you have no account, create a free one at [zotero.org](https://www.zotero.org/user/register).
+2. Zotero → **Settings → Sync**: sign in with your username and password (type the password only in Zotero, **never send it to the agent**).
+3. Click the sync button at the top right of the Zotero window once.
+4. **Send the agent a screenshot of the Sync page showing the signed-in account**; the agent re-checks and continues resolving.
+
+Why this matters, and notes on group libraries:
 
 **Why.** A Zotero citation stores a URI such as `http://zotero.org/users/<id>/items/<KEY>` or `http://zotero.org/groups/<id>/items/<KEY>`. The skill builds this URI from the item's own library, and **only when the library has a real numeric ID**, which comes from syncing with zotero.org.
 
@@ -153,7 +165,7 @@ On macOS, grant any permission prompts Word or Zotero shows. If the tab does not
 | **Personal library never synced (local-only)** | resolving **refuses**: the item goes to `missing` with *"cannot verify library namespace … local-only/unsynced"* |
 | Group library | works (`groups/<id>`) when you resolve with `--library group:<id>` |
 
-**How to fix a local-only library.** Create a free zotero.org account, sign in under Zotero **Settings → Sync** (设置 → 同步), and sync once. Then run resolving again. (If an existing Zotero-generated field in a document already carries a URI for that item, that URI is valid too. The skill just won't invent one.)
+**How to fix a local-only library.** Sign in and sync once as described above, then run resolving again. (If an existing Zotero-generated field in a document already carries a URI for that item, that URI is valid too. The skill just won't invent one.)
 
 **Group libraries.** List them with `zotero_local.py groups`, then resolve with `resolve_references.py --library group:<id> …`. Keep in mind:
 
@@ -268,7 +280,7 @@ Want to review the records first? Open the generated `missing.ris` in any text e
 ### A1. Open the output in Microsoft Word
 
 > [!WARNING]
-> Use **Microsoft Word** with the Zotero add-in. **Do not open and save the output in WPS, LibreOffice, Pages or online converters.** They can turn Zotero fields into plain text, and then the citations are no longer live. If that happens, go back to the last good copy.
+> **WPS is not supported.** Use **Microsoft Word** with the Zotero add-in. **Do not open and save the output in WPS, LibreOffice, Pages or online converters.** If WPS is the default app for `.docx`, right-click the file → Open with → Word. They can turn Zotero fields into plain text, and then the citations are no longer live. If that happens, go back to the last good copy.
 
 ### A2. Click Zotero → Refresh
 

@@ -263,7 +263,7 @@ def author_year_label(item_data: dict[str, Any]) -> str:
     elif len(authors) > 2:
         name += " et al."
     parts = ((item_data.get("issued") or {}).get("date-parts") or [[""]])[0]
-    return f"{name}, {parts[0] if parts else 'n.d.'}"
+    return f"{name}, {(parts[0] if parts else '') or 'n.d.'}"
 
 
 def numeric_label(numbers: list[int]) -> str:
@@ -366,8 +366,11 @@ class ItemPool:
     def __init__(self, ref_map: dict[str, Any] | None, base_url: str):
         self.by_ref = dict((ref_map or {}).get("resolved", {}))
         self.by_key = {v["key"]: v for v in self.by_ref.values()}
-        self.by_doi = {normalize_doi(v.get("doi") or (v.get("itemData") or {}).get("DOI")): v
-                       for v in self.by_ref.values()}
+        self.by_doi = {}
+        for v in self.by_ref.values():
+            doi = normalize_doi(v.get("doi") or (v.get("itemData") or {}).get("DOI"))
+            if doi:
+                self.by_doi[doi] = v
         self.base_url = base_url
         self._z: ZoteroLocal | None = None
 
@@ -396,6 +399,8 @@ class ItemPool:
             return self.by_key.get(value) or self._fetch_key(value)
         if kind == "doi":
             doi = normalize_doi(value)
+            if not doi:
+                raise UsageError(f"not a DOI: {value}")
             if doi not in self.by_doi:
                 raise UsageError(f"DOI {value} is not resolved in --items map")
             return self.by_doi[doi]
@@ -688,7 +693,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         "libraryNamespaces": port["libraryNamespaces"],
         "bibliography": bibliography,
         "documentPreferences": prefs_state,
-        "style": style_id,
+        # existing ZOTERO_PREF data is kept, so --style only applies to documents without it
+        "style": (result.get("documentPreferences") or {}).get("styleID") or style_id,
         "structuralValidation": "passed" if result["valid"] else "failed",
         "validationErrors": result["errors"],
         "validationWarnings": result["warnings"],

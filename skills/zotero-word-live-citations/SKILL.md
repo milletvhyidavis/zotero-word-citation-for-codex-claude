@@ -11,8 +11,14 @@ Every script is Python 3.9+ standard library only and has `--help`.
 ## 0. Setup (every task)
 
 - `SKILL_DIR` = the directory containing this `SKILL.md`. Call scripts as `"$PY" "$SKILL_DIR/scripts/<name>.py"`; quote paths (spaces/Chinese are fine).
-- Pick `PY` once: the first of `python3`, `python`, `py -3` whose `--version` prints ≥ 3.9 (on Windows skip the Microsoft Store stub that prints "Python was not found"). Codex users may also use the Codex-bundled `~/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python(.exe)`. If none exists, ask the user to install Python — never install anything yourself.
+- Pick `PY` once: the first of `python3`, `python`, `py -3` whose `--version` prints ≥ 3.9 (on Windows skip the Microsoft Store stub that prints "Python was not found"). Codex users may also use the Codex-bundled `~/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python(.exe)`. If none exists, **guide the user to install it** — never install anything yourself: give them https://www.python.org/downloads/ , tell Windows users to tick **"Add python.exe to PATH"** in the installer (macOS: the python.org installer or `brew install python`), then to reopen the terminal/agent session and confirm with `python --version` / `py -3 --version`.
 - Run `"$PY" "$SKILL_DIR/scripts/selftest.py"` and read the capabilities line. No Zotero → only validation/DOCX work is possible; no Word → skip visual rendering only.
+- **Zotero onboarding (mandatory before steps 3–4; the local API is required).** Unless `selftest.py` already shows `zotero-local-api` as OK, stop and ask the user to:
+  1. start Zotero Desktop (7+) and keep it running;
+  2. open Settings → Advanced → Miscellaneous (Windows/Linux: Edit → Settings; macOS: Zotero → Settings…), tick **"Allow other applications on this computer to communicate with Zotero" / “允许此计算机上的其他应用程序与 Zotero 通讯”**, and **send you a screenshot of that settings page with the box ticked**;
+  Check the screenshot (box ticked), then re-run `zotero_local.py status` and require `apiReachable` and `itemsReadable`.
+- **Zotero sign-in (only when needed).** Most users are already signed in, so do not ask up front. Only if `status` shows `loggedIn: false`, or resolving reports *"cannot verify library namespace … local-only/unsynced"*, explain that citations need a signed-in library and ask the user to sign in to zotero.org in Zotero Settings → Sync (free account), sync once, and send a screenshot of the Sync page; then re-run `status` / resolving. Never change Zotero settings yourself and never ask for the user's password.
+- **WPS is not supported.** Output must be opened, refreshed and saved only in Microsoft Word with the Zotero add-in; say so in the hand-off.
 - Keep work files (candidates, maps, placements, reports) in a work folder next to the document or in the agent scratch dir, never inside `SKILL_DIR`.
 
 ## 1. Route the request
@@ -55,11 +61,11 @@ Field format: [references/word-field-schema.md](references/word-field-schema.md)
 
 - `validate_zotero_docx.py out.docx --baseline in.docx [--preserve-baseline-citations] --expected-increase N --require-item-data --expect-bibliography --json`
 - Optional, if Word exists and the user agrees: `word_render.py out.docx --pdf out.pdf`, then look at the PDF pages. Rendering ≠ Zotero Refresh.
-- Tell the user: open the output in Microsoft Word with the Zotero add-in → Zotero tab → **Refresh**; then check style, numbering and bibliography. If Refresh reports modified/missing items, stop and report the field.
+- Tell the user: open the output in Microsoft Word with the Zotero add-in (**not WPS** — on machines where WPS owns `.docx`, use right-click → Open with → Word) → Zotero tab → **Refresh**; then check style, numbering and bibliography. If Refresh reports modified/missing items, stop and report the field.
 
 ## Hard rules
 
-- Never overwrite the input DOCX unless the user explicitly asks; never open/re-save a Zotero DOCX in WPS/Pages/LibreOffice.
+- Never overwrite the input DOCX unless the user explicitly asks; never open/re-save a Zotero DOCX in WPS/Pages/LibreOffice (WPS is not supported at all).
 - Never import, edit, move, merge or delete Zotero items without explicit approval of the exact count and target.
 - Cite parent items only (never attachment/note keys); use the URI of the item's own library; never mix a key with another library's URI prefix.
 - Never present plain `[1]` text, author–year text or ordinary Word fields as Zotero citations; never synthesize `formattedCitation`/`plainCitation`.

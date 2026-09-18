@@ -71,6 +71,14 @@ class UsageError(Exception):
     """Bad arguments or unusable environment (exit code 2)."""
 
 
+class ZoteroHTTPError(ConnectionError):
+    """Zotero answered, but with an error status (e.g. 404 for an unknown key)."""
+
+    def __init__(self, message: str, status: int):
+        super().__init__(message)
+        self.status = status
+
+
 # ---------------------------------------------------------------- HTTP ----
 
 
@@ -87,6 +95,11 @@ class Response:
 
     def json(self) -> Any:
         return json.loads(self.text or "null")
+
+
+LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
+_DIRECT = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_DEFAULT = urllib.request.build_opener()
 
 
 def http(
@@ -110,7 +123,9 @@ def http(
             body = str(data).encode("utf-8")
     try:
         req = urllib.request.Request(url, data=body, method=method, headers=req_headers)
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        # Zotero listens on this computer only: never route it through HTTP(S)_PROXY
+        opener = _DIRECT if urllib.parse.urlsplit(url).hostname in LOCAL_HOSTS else _DEFAULT
+        with opener.open(req, timeout=timeout) as response:
             return Response(
                 status=response.status,
                 headers=dict(response.headers.items()),
@@ -146,11 +161,34 @@ class ZoteroLocal:
         return http(self.base_url + path, method=method, data=data, headers=headers,
                     timeout=timeout or self.timeout)
 
+    def login_state(self) -> tuple[bool | None, int | None]:
+        """(loggedIn, userID) from the personal library's first item.
+
+        The local API exposes the numeric user ID only once Zotero is signed in
+        to a zotero.org account; an empty library gives (None, None) = unknown.
+        """
+        response = self.request("/api/users/0/items?limit=1&format=json", timeout=5)
+        if not response.ok:
+            return None, None
+        try:
+            rows = response.json() or []
+        except ValueError:
+            return None, None
+        if not rows:
+            return None, None
+        lib_id = (rows[0].get("library") or {}).get("id")
+        if isinstance(lib_id, int) and lib_id > 0:
+            return True, lib_id
+        return False, None
+
     def get_json(self, path: str) -> Any:
         response = self.request(path)
         if not response.ok:
             detail = response.error or response.text[:300]
-            raise ConnectionError(f"GET {path} failed: status={response.status} {detail}")
+            message = f"GET {path} failed: status={response.status} {detail}"
+            if response.status is not None:
+                raise ZoteroHTTPError(message, response.status)
+            raise ConnectionError(message)
         return response.json()
 
     @staticmethod

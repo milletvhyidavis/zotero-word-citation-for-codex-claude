@@ -14,8 +14,8 @@
   - [B1. 安装 Python ≥ 3.9](#b1)
   - [B2. 运行 Zotero 桌面版并允许本地通讯](#b2)
   - [B3. 安装 Zotero Word 插件](#b3)
-  - [B4. 安装所需的引文样式](#b4)
-  - [B5. 确认文库的同步情况（群组文库与纯本地文库）](#b5)
+  - [B4. 引文样式（可选）](#b4)
+  - [B5. 登录 Zotero 账号（通常已完成，出问题时再处理）](#b5)
   - [B6. 可选的环境变量](#b6)
   - [B7. 安装技能、新开会话、运行自检](#b7)
 - [每次任务](#for-every-task)
@@ -41,11 +41,11 @@
 
 **首次使用前（每台电脑一次）**
 
-- [ ] **B1** 已安装 Python ≥ 3.9，`python --version`（或 `py -3 --version`）能正常输出版本号。*必需*
-- [ ] **B2** Zotero 7+ 正在运行，并已勾选“允许此计算机上的其他应用程序与 Zotero 通讯”。*匹配和导入时必需*
+- [ ] **B1** 已安装 Python ≥ 3.9（没有的话 agent 会引导你从 python.org 下载），`python --version`（或 `py -3 --version`）能正常输出版本号。*必需*
+- [ ] **B2** Zotero 7+ 正在运行，已勾选“允许此计算机上的其他应用程序与 Zotero 通讯”，并已把勾选后的设置页**截图发给 agent**。*必需*
 - [ ] **B3** 已在 Microsoft Word 中安装 Zotero 插件，并重启了 Word。*Refresh 时必需*
-- [ ] **B4** 已在 Zotero 中安装所需的引文样式（如 GB/T 7714-2015）。*使用该样式时必需*
-- [ ] **B5** 文库至少同步过一次（或使用群组文库）。*纯本地文库时必需*
+- [ ] **B4** 引文样式无需提前准备，之后可在 Word 的“文档首选项”中自行更换。*可选*
+- [ ] **B5** Zotero 已登录 zotero.org 账号（大多数用户已登录；agent 检测到未登录时才会提醒你）。*出现问题时必需*
 - [ ] **B6** 已设置 `ZWLC_MAILTO` / `NCBI_API_KEY`。*可选*
 - [ ] **B7** 已安装技能、新开 agent 会话，`selftest.py` 全部 OK。*必需*
 
@@ -59,7 +59,7 @@
 
 **生成文档之后**
 
-- [ ] **A1** 已用 **Microsoft Word** 打开输出文件（不用 WPS / LibreOffice / Pages）。*必需*
+- [ ] **A1** 已用 **Microsoft Word** 打开输出文件（**不支持 WPS**，也不用 LibreOffice / Pages）。*必需*
 - [ ] **A2** 已点击 **Zotero → Refresh（刷新）**，并处理了弹出的对话框。*必需*
 - [ ] **A3** 已检查样式、编号和参考文献表；如需更换样式，已通过“文档首选项”修改。*必需*
 - [ ] **A4** 已通过 `zwlc-import` 标签删除不需要的导入条目。*可选*
@@ -99,7 +99,7 @@ py -3 --version
 > [!TIP]
 > **Codex 用户**的电脑上可能已经有 Codex 自带的 Python，位于 `~/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python`（Windows 上为 `python.exe`）。在没有系统 Python 时，技能说明允许 agent 使用它。
 
-agent 会依次尝试 `python3`、`python`、`py -3`，选用第一个版本 ≥ 3.9 的。如果都不行，它会请你安装 Python，不会自己动手安装。
+agent 会依次尝试 `python3`、`python`、`py -3`，选用第一个版本 ≥ 3.9 的。如果都不行，agent 会**引导你完成安装**：给出 python.org 下载地址，提醒 Windows 用户勾选 *Add python.exe to PATH*，装好后请你重开终端 / agent 会话再确认版本。它不会自己动手安装。
 
 <a id="b2"></a>
 ### B2. 运行 Zotero 桌面版并允许本地通讯
@@ -116,7 +116,8 @@ agent 会依次尝试 `python3`、`python`、`py -3`，选用第一个版本 ≥
 4. 进入**高级**（Advanced），在**杂项**（Miscellaneous）下勾选
    **“允许此计算机上的其他应用程序与 Zotero 通讯”**
    （**"Allow other applications on this computer to communicate with Zotero"**）。
-5. 关闭设置窗口。一般不需要重启；如果下面的检查仍然失败，再重启 Zotero。
+5. **把勾选后的设置页截图发给 agent。** 本地 API 是本技能的必需条件，agent 会先看截图确认已勾选，再运行下面的检查复核；没有这一步不会进入匹配和导入。
+6. 关闭设置窗口。一般不需要重启；如果下面的检查仍然失败，再重启 Zotero。
 
 **检查。** `$S` 指技能的 `scripts/` 目录，例如 `~/.claude/skills/zotero-word-live-citations/scripts`（见 [usage.md § 约定](usage.md#conventions)）：
 
@@ -143,14 +144,25 @@ python "$S/zotero_local.py" status
 在 macOS 上，请允许 Word 或 Zotero 弹出的权限请求。如果选项卡没有出现，请参阅 [troubleshooting.md § Word 中的 Zotero Refresh](troubleshooting.md#zotero-refresh-in-word)。
 
 <a id="b4"></a>
-### B4. 安装所需的引文样式
+### B4. 引文样式（可选）
 
-**为什么。** 技能会把样式 ID 写入文档，例如 `china-national-standard-gb-t-7714-2015-numeric`。只有 Zotero 中已经安装了该样式，Refresh 时才能应用它。
+**不需要提前准备。** 生成后可以随时在 Word → Zotero → **文档首选项** 中更换成任何已安装的样式。技能写入的样式 ID（例如 `china-national-standard-gb-t-7714-2015-numeric`）只是初始值；如果它没安装，Refresh 时 Zotero 会尝试下载或让你另选一个。
 
-**怎么做。** Zotero → **设置 → 引用 → 样式**（Settings → Cite → Styles）→ 点击 **+** 或**获取更多样式…**（Get additional styles…）→ 搜索，例如 “GB/T 7714” 或期刊名称 → 安装。确认样式已经出现在列表中。
+**如需安装新样式。** Zotero → **设置 → 引用 → 样式**（Settings → Cite → Styles）→ 点击 **+** 或**获取更多样式…**（Get additional styles…）→ 搜索，例如 “GB/T 7714” 或期刊名称 → 安装。确认样式已经出现在列表中。
 
 <a id="b5"></a>
-### B5. 确认文库的同步情况（群组文库与纯本地文库）
+### B5. 登录 Zotero 账号（通常已完成，出问题时再处理）
+
+**大多数用户无需操作。** agent 会通过 `zotero_local.py status`（`"loggedIn"`）或 `selftest.py`（`zotero-logged-in`）自动检查。只有检测到未登录，或匹配时出现 *“cannot verify library namespace … local-only/unsynced”*，agent 才会请你按下面的步骤登录。
+
+**怎么做（仅在 agent 提示时）。**
+
+1. 如果还没有账号，在 [zotero.org](https://www.zotero.org/user/register) 免费注册一个。
+2. Zotero → **设置 → 同步**（Settings → Sync），输入用户名和密码登录（密码只在 Zotero 里输入，**不要发给 agent**）。
+3. 点击 Zotero 窗口右上角的同步按钮，同步一次。
+4. **把显示已登录账号的同步页截图发给 agent**，agent 会重新检查并继续匹配。
+
+以下是背后的原因，以及群组文库的说明。
 
 **为什么。** Zotero 引用中保存着一个 URI，例如 `http://zotero.org/users/<id>/items/<KEY>` 或 `http://zotero.org/groups/<id>/items/<KEY>`。技能根据条目所在的文库生成这个 URI，而且**只在文库有真实的数字 ID 时才会生成**。这个 ID 要在与 zotero.org 同步后才会有。
 
@@ -160,7 +172,7 @@ python "$S/zotero_local.py" status
 | **从未同步过的个人文库（纯本地）** | 匹配时**拒绝**：条目会被归入 `missing`，原因为 *“cannot verify library namespace … local-only/unsynced”* |
 | 群组文库 | 使用 `--library group:<id>` 匹配时正常（`groups/<id>`） |
 
-**纯本地文库的解决办法：** 注册一个免费的 zotero.org 账号，在 Zotero 的**设置 → 同步**（Settings → Sync）中登录，同步一次，然后重新匹配。（如果文档中已有 Zotero 生成的引用域，其中带有该条目的 URI，那个 URI 同样有效；技能只是不会凭空编造 URI。）
+**纯本地文库的解决办法：** 按上面的步骤登录并同步一次，然后重新匹配。（如果文档中已有 Zotero 生成的引用域，其中带有该条目的 URI，那个 URI 同样有效；技能只是不会凭空编造 URI。）
 
 **群组文库。** 先用 `zotero_local.py groups` 列出群组，再用 `resolve_references.py --library group:<id> …` 匹配。请注意：
 
@@ -285,7 +297,7 @@ python ~/.claude/skills/zotero-word-live-citations/scripts/selftest.py
 ### A1. 用 Microsoft Word 打开输出文件
 
 > [!WARNING]
-> 请使用装有 Zotero 插件的 **Microsoft Word**。**不要用 WPS、LibreOffice、Pages 或在线转换工具打开并保存输出文件。** 它们可能把 Zotero 域变成纯文本，引用就不再“活”了。万一发生这种情况，请退回到最近一个完好的副本。
+> **本技能不支持 WPS。** 请使用装有 Zotero 插件的 **Microsoft Word**。**不要用 WPS、LibreOffice、Pages 或在线转换工具打开并保存输出文件。** 如果电脑默认用 WPS 打开 `.docx`，请右键文件 → 打开方式 → Word。 它们可能把 Zotero 域变成纯文本，引用就不再“活”了。万一发生这种情况，请退回到最近一个完好的副本。
 
 <a id="a2"></a>
 ### A2. 点击 Zotero → Refresh（刷新）

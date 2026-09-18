@@ -34,25 +34,34 @@ def status(z: ZoteroLocal) -> dict:
     api = z.request("/api/", timeout=3)
     connector = z.request("/connector/ping", timeout=3)
     items_ok = False
+    logged_in, user_id = None, None
     if api.ok:
         probe = z.request("/api/users/0/items/top?limit=1&format=keys", timeout=5)
         items_ok = probe.ok
+        logged_in, user_id = z.login_state()
+    if not api.ok:
+        hint = ("Start Zotero Desktop and enable Settings > Advanced > "
+                "'Allow other applications on this computer to communicate with Zotero'."
+                if not connector.ok else
+                "Connector is up but /api/ is not: enable the local API in Zotero settings "
+                "(same checkbox, Zotero 7+).")
+    elif logged_in is False:
+        hint = ("Zotero is not signed in: sign in to a zotero.org account in "
+                "Settings > Sync and sync once, otherwise citation URIs cannot be built.")
+    else:
+        hint = None
     return {
         "baseUrl": z.base_url,
         "apiReachable": api.ok,
         "apiStatus": api.status,
         "apiError": api.error,
         "itemsReadable": items_ok,
+        "loggedIn": logged_in,
+        "userLibraryId": user_id,
         "connectorReachable": connector.ok,
         "zoteroVersion": api.headers.get("X-Zotero-Version")
         or connector.headers.get("X-Zotero-Version"),
-        "hint": None if api.ok else (
-            "Start Zotero Desktop and enable Settings > Advanced > "
-            "'Allow other applications on this computer to communicate with Zotero'."
-            if not connector.ok else
-            "Connector is up but /api/ is not: enable the local API in Zotero settings "
-            "(same checkbox, Zotero 7+)."
-        ),
+        "hint": hint,
     }
 
 

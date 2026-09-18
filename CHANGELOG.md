@@ -4,6 +4,34 @@ All notable changes to this project are documented here. The format follows [Kee
 
 本文件记录项目的所有重要变更，格式参照 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+### Changed (English)
+
+- First-use setup: enabling Zotero's local API is now a **required** step, confirmed by a screenshot the user sends the agent. Zotero sign-in is checked automatically; the user is asked to sign in (with a screenshot) only when it is missing. The agent guides Python installation from python.org when none is found. **WPS is explicitly unsupported.** Citation styles no longer need to be installed in advance.
+- `zotero_local.py status` reports `loggedIn` / `userLibraryId`; `selftest.py` adds a `zotero-logged-in` check.
+
+### Fixed (English)
+
+- Requests to the local Zotero server no longer go through `HTTP(S)_PROXY` (previously failed when a proxy was set without `NO_PROXY`).
+- `[@doi:…]` with an unparsable DOI no longer silently cites an unrelated item that has no DOI.
+- A pinned `zoteroKey` that does not exist now lands in `missing` instead of aborting the whole run with "Zotero not reachable".
+- `build_import_file.py` no longer exports references that are already in the library but not citable (e.g. unsynced library), which would have created duplicates.
+- Author–date provisional text shows `n.d.` for items without a year; the report shows the document's real style when existing Zotero preferences are kept.
+
+### 变更（中文）
+
+- 首次使用：开启 Zotero 本地 API 改为**必需**步骤，用户需把设置截图发给 agent；Zotero 登录状态由 agent 自动检查，仅在未登录时才请用户登录并截图；找不到 Python 时由 agent 引导用户从 python.org 安装；明确**不支持 WPS**；引文样式无需提前安装。
+- `zotero_local.py status` 新增 `loggedIn` / `userLibraryId`；`selftest.py` 新增 `zotero-logged-in` 检查。
+
+### 修复（中文）
+
+- 访问本地 Zotero 不再经过 `HTTP(S)_PROXY`（此前设置了代理但未设置 `NO_PROXY` 时会连接失败）。
+- `[@doi:…]` 中的 DOI 无法解析时，不再静默引用一篇没有 DOI 的无关文献。
+- 锁定的 `zoteroKey` 不存在时，归入 `missing`，而不是以“Zotero not reachable”中止整个匹配。
+- `build_import_file.py` 不再导出“已在文库中但无法引用”的条目（例如未同步文库），避免重复导入。
+- 作者–年份临时文字在缺少年份时显示 `n.d.`；保留原有 Zotero 首选项时，报告中显示文档实际使用的样式。
+
 ## [1.0.0] — 2026-09-18
 
 Initial public release. · 首个公开版本。

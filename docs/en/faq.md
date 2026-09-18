@@ -54,7 +54,7 @@ The Zotero connector imports into **whatever collection is selected in the Zoter
 
 ### Can I cite items from a group library?
 
-Yes. List groups with `zotero_local.py groups`, then resolve with `resolve_references.py --library group:<id> …`. The citations get `groups/<id>` URIs. Limitations: `[@zotero:KEY]` shortcuts for keys *not* in the map only look in your personal library, and one insert run takes one map. See [manual-steps.md § B5](manual-steps.md#b5-check-how-your-library-is-synced-group-and-local-only-libraries).
+Yes. List groups with `zotero_local.py groups`, then resolve with `resolve_references.py --library group:<id> …`. The citations get `groups/<id>` URIs. Limitations: `[@zotero:KEY]` shortcuts for keys *not* in the map only look in your personal library, and one insert run takes one map. See [manual-steps.md § B5](manual-steps.md#b5-sign-in-to-zotero-usually-already-done-fix-only-when-asked).
 
 ### My library is local-only (never synced). What happens?
 

@@ -176,5 +176,100 @@ class BuildImportTests(unittest.TestCase):
             self.assertEqual((back[0]["doi"], back[0]["pmid"], back[0]["year"]), ("10.5555/b", "4242424", "2022"))
 
 
+class LoginStateTests(unittest.TestCase):
+    def _state(self, status, body):
+        from _common import Response, ZoteroLocal
+
+        z = ZoteroLocal()
+        z.request = lambda *a, **k: Response(status=status, headers={}, text=body)
+        return z.login_state()
+
+    def test_signed_in(self):
+        body = json.dumps([{"key": "ABCD1234", "library": {"type": "user", "id": 42}}])
+        self.assertEqual(self._state(200, body), (True, 42))
+
+    def test_not_signed_in(self):
+        body = json.dumps([{"key": "ABCD1234", "library": {"type": "user", "id": 0}}])
+        self.assertEqual(self._state(200, body), (False, None))
+
+    def test_empty_library_or_api_down_is_unknown(self):
+        self.assertEqual(self._state(200, "[]"), (None, None))
+        self.assertEqual(self._state(None, ""), (None, None))
+
+
+class DeploymentBugTests(unittest.TestCase):
+    def test_bad_doi_placeholder_does_not_match_item_without_doi(self):
+        import insert_zotero_fields as ins
+        from _common import UsageError
+
+        pool = ins.ItemPool({"resolved": {"R1": {"key": "AAAA1111", "uri": "u", "itemData": {}}}}, "http://x")
+        with self.assertRaises(UsageError):
+            pool.get("doi", "not-a-doi")
+
+    def test_author_date_label_without_year(self):
+        import insert_zotero_fields as ins
+
+        self.assertEqual(ins.author_year_label({"author": [{"family": "Smith"}]}), "Smith, n.d.")
+
+    def test_unknown_pinned_key_is_missing_not_fatal(self):
+        from _common import ZoteroHTTPError
+
+        def fetch(key):
+            raise ZoteroHTTPError(f"GET {key} failed: status=404", 404)
+
+        status, payload = rr.resolve_one({"refId": "A", "zoteroKey": "ZZZZ9999"}, lambda q, e: [], fetch)
+        self.assertEqual(status, "missing")
+        self.assertTrue(payload["pinnedKey"])
+
+    def test_unreachable_zotero_still_aborts_pinned_lookup(self):
+        def fetch(key):
+            raise ConnectionError("status=None connection refused")
+
+        with self.assertRaises(ConnectionError):
+            rr.resolve_one({"refId": "A", "zoteroKey": "ZZZZ9999"}, lambda q, e: [], fetch)
+
+    def test_in_library_missing_items_are_not_exported_for_import(self):
+        data = {"references": [{"refId": "A", "title": "Already there"}, {"refId": "B", "title": "New"}],
+                "resolved": {},
+                "missing": [{"refId": "A", "inLibrary": True, "reason": "cannot verify library namespace"},
+                            {"refId": "B", "reason": "no library item matched the title"}]}
+        with tempfile.TemporaryDirectory() as tmp:
+            map_path, out = Path(tmp) / "map.json", Path(tmp) / "missing.ris"
+            map_path.write_text(json.dumps(data), encoding="utf-8")
+            with contextlib.redirect_stderr(io.StringIO()):
+                build_import_file.main(["--map", str(map_path), "--out", str(out)])
+            ris = out.read_text(encoding="utf-8")
+        self.assertIn("TI  - New", ris)
+        self.assertNotIn("Already there", ris)
+
+    def test_local_requests_bypass_proxy(self):
+        import http.server
+        import os
+        import threading
+        from unittest import mock
+
+        import _common
+
+        class Ok(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(b"ok")
+
+            def log_message(self, *args):
+                pass
+
+        server = http.server.HTTPServer(("127.0.0.1", 0), Ok)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        env = {k: v for k, v in os.environ.items() if k.lower() != "no_proxy"}
+        env.update(HTTP_PROXY="http://127.0.0.1:9", http_proxy="http://127.0.0.1:9")
+        try:
+            with mock.patch.dict(os.environ, env, clear=True):
+                response = _common.http(f"http://127.0.0.1:{server.server_port}/", timeout=5)
+        finally:
+            server.shutdown()
+            server.server_close()
+        self.assertTrue(response.ok, response.error)
+
 if __name__ == "__main__":
     unittest.main()

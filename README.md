@@ -74,11 +74,15 @@ Rectangles are automatic. **Yellow hexagons are human actions.**
 
 > [!IMPORTANT]
 > **Before first use (once)**
-> 1. **Install Python ≥ 3.9.** The skill never installs anything. On Windows, beware the Microsoft Store `python` alias ("Python was not found…"): install from python.org and use `py -3`. Codex users can fall back to the Codex-bundled Python.
-> 2. **Start Zotero Desktop and enable** *Settings → Advanced → Miscellaneous → Allow other applications on this computer to communicate with Zotero*. Check with `selftest.py` or `zotero_local.py status`.
-> 3. **Install the Zotero Word add-in:** Zotero → Settings → Cite → Word Processors → Install Microsoft Word Add-in, then **restart Word**.
-> 4. **Install the citation styles you need** in Zotero (Settings → Cite → Styles), e.g. GB/T 7714-2015.
-> 5. **Local-only library?** Sync it once with zotero.org, because citation URIs need a synced user ID (or use a group library).
+> 1. **Install Python ≥ 3.9.** If the computer has no Python yet, the agent walks you through it: download the installer from [python.org/downloads](https://www.python.org/downloads/); on Windows **tick "Add python.exe to PATH"**. Then reopen the terminal / agent session and confirm with `python --version` or `py -3 --version`. The skill itself never installs software.
+> 2. **Start Zotero and enable local communication (required).** The skill works through the Zotero local API, so this step cannot be skipped. Zotero → Settings (Windows: Edit → Settings; macOS: Zotero → Settings…) → Advanced → Miscellaneous → tick **"Allow other applications on this computer to communicate with Zotero"**, then **send the agent a screenshot of the ticked setting**. The agent checks it and confirms with `zotero_local.py status`.
+> 3. **Sign in to Zotero (usually already done, optional).** Most users are already signed in and need to do nothing. The agent checks automatically; only if it detects that you are not signed in will it ask you to sign in under Zotero → Settings → Sync (free zotero.org account), sync once, and send a screenshot of the Sync page. Without sign-in, Zotero exposes no user ID and citations fail to resolve. The agent never asks for your password.
+> 4. **Install the Zotero Word add-in:** Zotero → Settings → Cite → Word Processors → Install Microsoft Word Add-in, then **restart Word**.
+>
+> No citation style needs to be prepared in advance: change it anytime afterwards in Word → Zotero → Document Preferences.
+
+> [!WARNING]
+> **WPS is not supported.** Open, refresh and save the output only in **Microsoft Word** with the Zotero add-in. Saving in WPS turns the Zotero fields into plain text. If WPS is the default app for `.docx`, use right-click → Open with → Word. LibreOffice and Pages are not supported either.
 
 > [!CAUTION]
 > **Before every import:** in the **Zotero window, create or select the target collection yourself.** The connector imports into whatever collection is selected. There is no collection parameter. The agent tells you *"N records → collection X"* and waits for an explicit **yes**. `--expect-target` refuses if the selection changed. Use a dedicated test collection. Imports carry the tag `zwlc-import` so you can find and undo them yourself (the skill never deletes).

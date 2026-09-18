@@ -74,11 +74,15 @@ flowchart TD
 
 > [!IMPORTANT]
 > **首次使用前（只需一次）**
-> 1. **安装 Python ≥ 3.9。** 本技能不会替你安装任何东西。Windows 用户注意微软商店的 `python` 占位程序（提示“Python was not found…”）：请从 python.org 安装，并用 `py -3` 运行。Codex 用户也可以使用 Codex 自带的 Python。
-> 2. **启动 Zotero 桌面版并开启本地通讯：** 设置 → 高级 → 杂项 → 勾选“允许此计算机上的其他应用程序与 Zotero 通讯”。可以用 `selftest.py` 或 `zotero_local.py status` 检查。
-> 3. **安装 Zotero Word 插件：** Zotero → 设置 → 引用 → 文字处理软件 → 安装 Microsoft Word 加载项，然后**重启 Word**。
-> 4. **在 Zotero 中安装需要的引文样式**（设置 → 引用 → 样式），例如 GB/T 7714-2015。
-> 5. **文库从未同步过？** 请先用 zotero.org 账号同步一次，因为引用 URI 需要同步后才有的用户 ID（或改用群组文库）。
+> 1. **安装 Python ≥ 3.9。** 如果电脑上还没有 Python，agent 会引导你下载安装：打开 [python.org/downloads](https://www.python.org/downloads/)，下载安装包；Windows 安装时**务必勾选 “Add python.exe to PATH”**。装好后重开终端 / agent 会话，用 `python --version` 或 `py -3 --version` 确认。技能本身不会替你安装任何软件。
+> 2. **启动 Zotero 并开启本地通讯（必需）：** 本技能通过 Zotero 本地 API 工作，这一步不能跳过。打开 Zotero → 设置（Windows：编辑 → 设置；macOS：Zotero → 设置…）→ 高级 → 杂项 → 勾选 **“允许此计算机上的其他应用程序与 Zotero 通讯”**，然后**把勾选后的设置页截图发给 agent**，agent 会据此确认并运行 `zotero_local.py status` 复核。
+> 3. **登录 Zotero 账号（通常已完成，可选）：** 大多数用户已经登录，无需额外操作。agent 会自动检查；只有检测到未登录时，才会请你在 Zotero → 设置 → 同步 中登录 zotero.org 账号（可免费注册）、同步一次，并把同步页截图发给它。未登录时 Zotero 不提供引用所需的用户 ID，引用会匹配失败。agent 不会索要你的密码。
+> 4. **安装 Zotero Word 插件：** Zotero → 设置 → 引用 → 文字处理软件 → 安装 Microsoft Word 加载项，然后**重启 Word**。
+>
+> 引文样式无需提前准备：生成后可随时在 Word → Zotero → 文档首选项中自行更换。
+
+> [!WARNING]
+> **不支持 WPS。** 输出文件只能用装有 Zotero 插件的 **Microsoft Word** 打开、刷新和保存。WPS 打开并保存后，Zotero 域会变成纯文本，引用不再“活”。如果电脑默认用 WPS 打开 `.docx`，请右键 → 打开方式 → Word。LibreOffice / Pages 同样不支持。
 
 > [!CAUTION]
 > **每次导入前：请你自己在 Zotero 窗口里新建或选中目标集合。** connector 会把条目导入**当前选中**的集合，没有参数可以指定集合。agent 会告诉你“N 条记录 → 集合 X”，并等你明确回复**同意**。如果选中的集合在此期间变了，`--expect-target` 会拒绝导入。建议使用专门的测试集合。导入的条目都带有 `zwlc-import` 标签，方便你自己查找和撤销（本技能从不删除任何东西）。
