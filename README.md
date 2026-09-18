@@ -23,7 +23,6 @@
 - [常见问题](#常见问题)
 - [安全保证](#安全保证)
 - [支持的引文格式](#支持的引文格式)
-- [进阶内容](#进阶内容)
 - [许可与致谢](#许可与致谢)
 
 ## 准备工作
@@ -236,66 +235,6 @@ agent 永远不会替你点 Refresh。多人共享的文档，处理前请先和
 | `gb-t-7714-author-date` | GB/T 7714-2015 著者–出版年制 |
 
 其他格式也可以用，只要把 Zotero 样式库中的完整地址告诉 agent，例如 `http://www.zotero.org/styles/cell`。刷新时要用到的格式需要已安装在你的 Zotero 中。中文引文可加 `--locale zh-CN`。
-
-## 进阶内容
-
-### 不用 agent，手动运行脚本
-
-所有脚本都能单独使用，每个脚本都支持 `--help`。下面的 `S` 代表技能的 `scripts/` 目录：
-
-```bash
-S=skills/zotero-word-live-citations/scripts
-```
-
-查找文献，并与 Zotero 文库匹配：
-
-```bash
-python $S/search_literature.py search "PD-1 blockade melanoma" --source openalex,pubmed --limit 5 --out candidates.json
-```
-
-```bash
-python $S/resolve_references.py --references candidates.json --out map.json
-```
-
-如果有文库里没有的文献：先生成导入文件，**在 Zotero 中选中目标集合**，再导入并重新匹配：
-
-```bash
-python $S/build_import_file.py --map map.json --format ris --out missing.ris --tag zwlc-import
-```
-
-```bash
-python $S/zotero_local.py selected-target
-```
-
-```bash
-python $S/zotero_local.py import-ris --file missing.ris --expect-target "我的测试集合" --yes
-```
-
-```bash
-python $S/resolve_references.py --references candidates.json --out map.json
-```
-
-草稿 `draft.md` 中用 `[@ref:C1; @ref:C3]` 这样的标记表示引用位置。转成 Word、写入引用、检查结果：
-
-```bash
-python $S/md_to_docx.py --input draft.md --output draft.docx
-```
-
-```bash
-python $S/insert_zotero_fields.py --input draft.docx --items map.json --placeholders --style gb-t-7714-numeric --locale zh-CN --bibliography-heading "参考文献" --report report.json
-```
-
-```bash
-python $S/validate_zotero_docx.py draft-zotero-cited.docx --baseline draft.docx --require-item-data --expect-bibliography --json
-```
-
-最后用 Word 打开 `draft-zotero-cited.docx`，点击 **Zotero → Refresh**。
-
-在 PowerShell 中，变量写作 `$S = "skills\zotero-word-live-citations\scripts"`，命令写作 `python "$S\search_literature.py" …`。
-
-可选的环境变量：`ZWLC_MAILTO`（检索时附带的联系邮箱）、`NCBI_API_KEY`（提高 PubMed 检索限额）、`ZOTERO_LOCAL_BASE_URL`（Zotero 不在默认端口时使用）。
-
-完整说明见 [使用说明](docs/zh-CN/usage.md)。
 
 ### 技术细节
 
