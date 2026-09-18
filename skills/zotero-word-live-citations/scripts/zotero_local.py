@@ -103,6 +103,11 @@ def main(argv: list[str] | None = None) -> int:
                        help="confirm the user approved this import")
         p.add_argument("--expect-target", metavar="NAME",
                        help="refuse unless the selected Zotero collection/library has this name")
+        p.add_argument("--expect-library-id", metavar="ID",
+                       help="refuse unless the selected libraryID (from selected-target) matches")
+        p.add_argument("--expect-collection-id", metavar="ID",
+                       help="refuse unless the selected collection id (from selected-target) "
+                            "matches; use 'null' when the library root is selected")
 
     args = parser.parse_args(argv)
     z = ZoteroLocal(args.base_url)
@@ -187,9 +192,17 @@ def main(argv: list[str] | None = None) -> int:
             if args.expect_target and args.expect_target != target_name:
                 raise UsageError(f"selected Zotero target is '{target_name}', expected "
                                  f"'{args.expect_target}'. Select the right collection in Zotero.")
+            # a name alone is not unique: libraries can hold collections with the same name
+            for flag, key, expected in (("--expect-library-id", "libraryID", args.expect_library_id),
+                                        ("--expect-collection-id", "id", args.expect_collection_id)):
+                actual = "null" if t.get(key) is None else str(t.get(key))
+                if expected is not None and expected != actual:
+                    raise UsageError(f"selected Zotero target has {key}={actual}, expected {expected} "
+                                     f"({flag}). Select the right collection in Zotero.")
             if not args.yes:
                 print(f"Refusing to write: this would import {n} {kind.upper()} record(s) into "
-                      f"'{target_name}' (library '{t.get('libraryName')}'). "
+                      f"'{target_name}' (library '{t.get('libraryName')}', "
+                      f"libraryID={t.get('libraryID')}, collection id={t.get('id')}). "
                       "Re-run with --yes only after the user approves.", file=sys.stderr)
                 return EXIT_USAGE
             session = f"zwlc-{uuid.uuid4().hex}"

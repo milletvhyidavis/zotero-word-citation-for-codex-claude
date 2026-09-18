@@ -50,7 +50,7 @@ It only **adds** items, and only after you approve the exact count and target co
 
 ### Why did my import go into the wrong collection?
 
-The Zotero connector imports into **whatever collection is selected in the Zotero window**. There is no collection parameter. Select the collection **before** approving. The agent passes `--expect-target` so the import refuses if the selection changes. See [manual-steps.md § T4](manual-steps.md#t4-before-any-import-select-the-target-collection-then-approve).
+The Zotero connector imports into **whatever collection is selected in the Zotero window**. There is no collection parameter. Select the collection **before** approving. The agent passes `--expect-target` plus the library and collection IDs, so the import refuses if the selection changes. See [manual-steps.md § T4](manual-steps.md#t4-before-any-import-select-the-target-collection-then-approve).
 
 ### Can I cite items from a group library?
 

@@ -327,9 +327,10 @@ def apply_prefs(parts: dict[str, bytes], prefs: str) -> str:
             props += (f'<property fmtid="{PROPS_FMTID}" pid="{pid}" name="ZOTERO_PREF_{i}">'
                       f"<vt:lpwstr>{xml_escape(chunk)}</vt:lpwstr></property>")
             pid += 1
-        if "</Properties>" not in text:
+        root = re.search(r"<(\w+:)?Properties\b", text)
+        prefix = (root.group(1) or "") if root else ""
+        if not root or f"</{prefix}Properties>" not in text:
             raise UsageError("docProps/custom.xml has an unexpected structure")
-        prefix = re.search(r"<(\w+:)?Properties\b", text).group(1) or ""
         if prefix:
             props = props.replace("<property", f"<{prefix}property").replace(
                 "</property>", f"</{prefix}property>")
@@ -528,6 +529,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         raise UsageError(f"input not found: {src}")
     if src == out:
         raise UsageError("output must differ from input (refusing to overwrite the original)")
+    if args.report and args.report.expanduser().resolve() in (src, out):
+        raise UsageError("--report must differ from --input and --output")
     if out.exists() and not args.force and not args.list_paragraphs:
         raise UsageError(f"output exists: {out} (use --force to replace it)")
     if not args.placements and not args.placeholders and not args.list_paragraphs \

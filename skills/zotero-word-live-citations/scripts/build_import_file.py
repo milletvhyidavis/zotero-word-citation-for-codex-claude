@@ -2,7 +2,7 @@
 """Build a RIS or BibTeX file for references missing from Zotero (does NOT import).
 
 Reads a reference-map.json (from resolve_references.py) and writes the records
-listed under "missing" - or only the --ref-id values given - so the user can
+listed under "missing" - or only those of them named by --ref-id - so the user can
 review them before `zotero_local.py import-ris --file ... --yes`.
 
 Records without a title are skipped and reported; nothing is invented.
@@ -91,7 +91,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--format", choices=("ris", "bibtex"), default="ris")
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--ref-id", action="append", default=[],
-                        help="export only these refIds (default: all 'missing')")
+                        help="export only these refIds, which must be 'missing' (default: all 'missing')")
     parser.add_argument("--tag", action="append", default=[],
                         help="add a Zotero tag to every record (e.g. zwlc-import)")
     args = parser.parse_args(argv)
@@ -103,6 +103,8 @@ def main(argv: list[str] | None = None) -> int:
         return EXIT_USAGE
     by_id = {str(r["refId"]): r for r in data.get("references", [])}
     in_library = {str(m["refId"]): m for m in data.get("missing", []) if m.get("inLibrary")}
+    missing = {str(m["refId"]) for m in data.get("missing", [])}
+    ambiguous = {str(a["refId"]): a for a in data.get("ambiguous", [])}
     wanted = args.ref_id or [str(m["refId"]) for m in data.get("missing", [])]
     if not wanted:
         print("Nothing to export: no missing references.", file=sys.stderr)
@@ -115,6 +117,11 @@ def main(argv: list[str] | None = None) -> int:
         elif rid in in_library:
             skipped.append(f"{rid}: already in Zotero but not citable - "
                            f"{in_library[rid].get('reason')}; importing would create a duplicate")
+        elif rid in ambiguous:
+            skipped.append(f"{rid}: ambiguous in Zotero ({ambiguous[rid].get('reason')}) - "
+                           "pin the right zoteroKey instead of importing a duplicate")
+        elif rid not in missing:
+            skipped.append(f"{rid}: not listed as missing in the map - only missing references are exported")
         elif not rec or not rec.get("title"):
             skipped.append(f"{rid}: no structured title - look it up with search_literature.py first")
         else:

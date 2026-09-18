@@ -306,13 +306,14 @@ The agent then tells you something like *"18 records → collection 肿瘤免疫
 ### 7.3 Import (write)
 
 ```bash
-python "$S/zotero_local.py" import-ris --file zotero-work/missing.ris --expect-target "肿瘤免疫测试" --yes
+python "$S/zotero_local.py" import-ris --file zotero-work/missing.ris --expect-target "肿瘤免疫测试" --expect-library-id 1 --expect-collection-id 42 --yes
 ```
 
 | Flag | Meaning |
 |---|---|
 | `--file` | the RIS (or, for `import-bibtex`, BibTeX) file |
 | `--expect-target NAME` | refuse (exit 2) if the selected collection/library is not named exactly `NAME`. This protects you if the selection changed after you approved. |
+| `--expect-library-id ID`, `--expect-collection-id ID` | refuse (exit 2) unless the selection has exactly this `libraryID` / collection `id`, as printed by `selected-target` (`null` = library root). Names are not unique (two libraries can both have an *Inbox*), so the agent passes the IDs too. |
 | `--yes` | confirms that you approved this import. Without it the script prints what it *would* do and refuses (exit 2). |
 
 The script also refuses if the selected target is not editable. On success it prints `requestedRecords`, `target`, `session` and `connectorReportedItems`. **That response is not proof of success.** The next step is always to re-resolve.
@@ -590,7 +591,7 @@ The convention for all scripts: **0** success · **1** validation failure, or un
 | `search_literature.py` | results written | every source failed / some lookup failed | bad arguments / unexpected error |
 | `resolve_references.py` | everything resolved | some missing or ambiguous (map written) | bad input, Zotero unreachable |
 | `build_import_file.py` | file written (or nothing to export) | some records skipped / none exportable | map unreadable |
-| `zotero_local.py` | success | connection error, import failed, `status` not OK | refused (no `--yes`, `--expect-target` mismatch, target not editable, empty file) |
+| `zotero_local.py` | success | connection error, import failed, `status` not OK | refused (no `--yes`, `--expect-target`/`--expect-*-id` mismatch, target not editable, empty file) |
 | `md_to_docx.py` | written | | input missing, output exists |
 | `insert_zotero_fields.py` | written and structurally valid | written, but validation failed | refused (unresolved marker, ambiguous anchor, output exists, input invalid …). Nothing written. |
 | `validate_zotero_docx.py` | valid | invalid | bad arguments |
@@ -634,7 +635,7 @@ It then asked *"18 records → collection 肿瘤免疫测试 in My Library. Impo
 **6. Import:**
 
 ```bash
-python "$S/zotero_local.py" import-ris --file missing.ris --expect-target "肿瘤免疫测试" --yes
+python "$S/zotero_local.py" import-ris --file missing.ris --expect-target "肿瘤免疫测试" --expect-library-id 1 --expect-collection-id 42 --yes
 ```
 
 **7. Re-resolve.** 18/18 matched by DOI:

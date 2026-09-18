@@ -46,7 +46,7 @@ Order: pinned `zoteroKey` > DOI > PMID > exact title > title+author+year. Ambigu
 
 1. `build_import_file.py --map reference-map.json --format ris --out missing.ris [--tag zwlc-import]`
 2. `zotero_local.py selected-target` → tell the user: *N records → collection X in library Y* (imports land in whatever is selected in the Zotero window). Ask them to confirm or to select another collection first.
-3. Only after a clear "yes": `zotero_local.py import-ris --file missing.ris --expect-target "<name>" --yes`
+3. Only after a clear "yes": `zotero_local.py import-ris --file missing.ris --expect-target "<name>" --expect-library-id <libraryID> --expect-collection-id <id> --yes` (IDs from `selected-target`; names are not unique)
 4. Re-run step 3 and use the new map. Items still missing are failures — never fabricate a key or URI.
 Rules: [references/import-policy.md](references/import-policy.md).
 

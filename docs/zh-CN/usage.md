@@ -313,13 +313,14 @@ python "$S/zotero_local.py" selected-target
 ### 7.3 导入（写入）
 
 ```bash
-python "$S/zotero_local.py" import-ris --file zotero-work/missing.ris --expect-target "肿瘤免疫测试" --yes
+python "$S/zotero_local.py" import-ris --file zotero-work/missing.ris --expect-target "肿瘤免疫测试" --expect-library-id 1 --expect-collection-id 42 --yes
 ```
 
 | 参数 | 含义 |
 |---|---|
 | `--file` | RIS 文件（`import-bibtex` 则为 BibTeX 文件） |
 | `--expect-target NAME` | 如果当前选中的集合或文库名称不完全等于 `NAME`，就拒绝导入（退出码 2）。这样即使你批准后选中项变了，也不会导错地方。 |
+| `--expect-library-id ID`、`--expect-collection-id ID` | 只有当前选中项的 `libraryID` 和集合 `id`（即 `selected-target` 输出的值，`null` 表示文库根目录）完全一致才导入，否则拒绝（退出码 2）。名称可能重复（两个文库都可以有 *Inbox*），所以 agent 会同时传入 ID。 |
 | `--yes` | 表示你已批准这次导入。不加时脚本只显示*将要*执行的操作并拒绝执行（退出码 2）。 |
 
 如果选中的目标不可编辑，脚本同样会拒绝。成功时输出 `requestedRecords`、`target`、`session` 和 `connectorReportedItems`。**这个返回结果并不能证明导入成功**，下一步必须重新匹配。
@@ -609,7 +610,7 @@ agent 完成时，“Zotero Refresh: left to user”（留给用户）是正常�
 | `search_literature.py` | 结果已写出 | 所有来源都失败 / 有 lookup 失败 | 参数错误 / 意外错误 |
 | `resolve_references.py` | 全部匹配成功 | 有缺失或歧义（map 已写出） | 输入有误、无法连接 Zotero |
 | `build_import_file.py` | 文件已写出（或没有要导出的内容） | 有记录被跳过 / 没有可导出的记录 | map 无法读取 |
-| `zotero_local.py` | 成功 | 连接错误、导入失败、`status` 不正常 | 拒绝执行（没有 `--yes`、`--expect-target` 不符、目标不可编辑、文件为空） |
+| `zotero_local.py` | 成功 | 连接错误、导入失败、`status` 不正常 | 拒绝执行（没有 `--yes`、`--expect-target`/`--expect-*-id` 不符、目标不可编辑、文件为空） |
 | `md_to_docx.py` | 已写出 | | 输入不存在、输出已存在 |
 | `insert_zotero_fields.py` | 已写出且结构有效 | 已写出，但验证失败 | 拒绝执行（标记无法解析、锚点有歧义、输出已存在、输入无效等），不写出任何文件 |
 | `validate_zotero_docx.py` | 有效 | 无效 | 参数错误 |
@@ -654,7 +655,7 @@ python "$S/zotero_local.py" selected-target
 **6. 导入：**
 
 ```bash
-python "$S/zotero_local.py" import-ris --file missing.ris --expect-target "肿瘤免疫测试" --yes
+python "$S/zotero_local.py" import-ris --file missing.ris --expect-target "肿瘤免疫测试" --expect-library-id 1 --expect-collection-id 42 --yes
 ```
 
 **7. 重新匹配。** 18/18 全部按 DOI 匹配成功：

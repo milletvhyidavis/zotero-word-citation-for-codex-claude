@@ -242,6 +242,56 @@ class DeploymentBugTests(unittest.TestCase):
         self.assertIn("TI  - New", ris)
         self.assertNotIn("Already there", ris)
 
+    def test_explicit_ref_id_cannot_export_ambiguous_or_resolved(self):
+        data = {"references": [{"refId": r, "title": f"T{r}"} for r in "ABCD"],
+                "resolved": {"A": {"key": "KEY00001"}},
+                "missing": [{"refId": "D", "reason": "no match"}],
+                "ambiguous": [{"refId": "B", "reason": "2 library items share this DOI"}]}
+        with tempfile.TemporaryDirectory() as tmp:
+            map_path, out = Path(tmp) / "map.json", Path(tmp) / "missing.ris"
+            map_path.write_text(json.dumps(data), encoding="utf-8")
+            with contextlib.redirect_stderr(io.StringIO()) as err:
+                code = build_import_file.main(["--map", str(map_path), "--out", str(out),
+                                               "--ref-id", "A", "--ref-id", "B", "--ref-id", "C"])
+            self.assertEqual(code, 1)
+            self.assertFalse(out.exists())
+            self.assertIn("B: ambiguous", err.getvalue())
+            self.assertIn("C: not listed as missing", err.getvalue())
+            with contextlib.redirect_stderr(io.StringIO()):
+                code = build_import_file.main(["--map", str(map_path), "--out", str(out), "--ref-id", "D"])
+            self.assertEqual(code, 0)
+            self.assertIn("TI  - TD", out.read_text(encoding="utf-8"))
+
+    def test_import_checks_library_and_collection_ids(self):
+        from unittest import mock
+
+        import zotero_local
+        from _common import Response
+
+        target = {"libraryID": 2, "libraryName": "Group B", "id": 7, "name": "Inbox", "editable": True}
+        calls = []
+
+        def fake_request(self, path, method="GET", data=None, **kw):
+            calls.append(path)
+            if "getSelectedCollection" in path:
+                return Response(status=200, headers={}, text=json.dumps(target))
+            return Response(status=201, headers={}, text="[]")
+
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(zotero_local.ZoteroLocal, "request", fake_request):
+            ris = Path(tmp) / "m.ris"
+            ris.write_text("TY  - JOUR\nTI  - X\nER  - \n", encoding="utf-8")
+            base = ["import-ris", "--file", str(ris), "--expect-target", "Inbox", "--yes"]
+            with contextlib.redirect_stderr(io.StringIO()) as err, contextlib.redirect_stdout(io.StringIO()):
+                code = zotero_local.main(base + ["--expect-library-id", "1", "--expect-collection-id", "7"])
+            self.assertEqual(code, 2)
+            self.assertIn("libraryID=2", err.getvalue())
+            self.assertFalse(any("/connector/import" in c for c in calls))
+            with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+                code = zotero_local.main(base + ["--expect-library-id", "2", "--expect-collection-id", "7"])
+            self.assertEqual(code, 0)
+            self.assertTrue(any("/connector/import" in c for c in calls))
+
     def test_local_requests_bypass_proxy(self):
         import http.server
         import os

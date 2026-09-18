@@ -35,7 +35,7 @@
 "$PY" $S/build_import_file.py --map $W/reference-map.json --format ris --out $W/missing.ris --tag zwlc-import
 "$PY" $S/zotero_local.py selected-target
 # show the user: count, titles, target collection/library -> wait for "yes"
-"$PY" $S/zotero_local.py import-ris --file $W/missing.ris --expect-target "<collection name>" --yes
+"$PY" $S/zotero_local.py import-ris --file $W/missing.ris --expect-target "<collection name>" --expect-library-id <libraryID> --expect-collection-id <id> --yes
 "$PY" $S/resolve_references.py --references $W/refs.json --out $W/reference-map.json
 ```
 

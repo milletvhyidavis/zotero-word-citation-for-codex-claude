@@ -23,6 +23,11 @@ All notable changes to this project are documented here. The format follows [Kee
 - `search_literature.py lookup` 中某个 DOI/PMID 查不到时，其余结果照常输出，失败项逐条警告，不再整批中止。
 - 样式名只是包含 “apa” 字样（如 japanese-…）时，不再被误判为作者–年份格式。
 - `md_to_docx.py` 支持 `####` 及更深的标题，不再把 `####` 原样留在正文中。
+- `insert_zotero_fields.py --report` 指向输入或输出文档时直接拒绝，不再覆盖原稿后仍报告 `inputUnchanged=true`。
+- 校验器按拼接后的域代码计数，`ZOTERO_ITEM` 与 `CSL_CITATION` 被 Word 拆到不同 `instrText` 时不再误报为损坏。
+- `zotero_local.py import-*` 新增 `--expect-library-id` / `--expect-collection-id`，避免不同文库中的同名集合（如两个 *Inbox*）通过校验。
+- `build_import_file.py --ref-id` 只能导出 `missing` 中的条目，不再绕过限制导出 `ambiguous` 或已匹配的条目造成重复。
+- 带命名空间前缀的 `docProps/custom.xml`（如 `<cp:Properties>`）可以正常写入 Zotero 首选项，不再报 “unexpected structure”。
 
 ### Changed (English)
 
@@ -41,6 +46,11 @@ All notable changes to this project are documented here. The format follows [Kee
 - `search_literature.py lookup` keeps the records it found when one DOI/PMID fails, warning per failure instead of aborting the whole batch.
 - Style names that merely contain “apa” (e.g. japanese-…) are no longer treated as author–date.
 - `md_to_docx.py` handles `####` and deeper headings instead of leaving `####` in the text.
+- `insert_zotero_fields.py` refuses a `--report` path equal to the input or output document, instead of overwriting the original and still reporting `inputUnchanged=true`.
+- The validator counts instructions on the joined field code, so a valid field whose `ZOTERO_ITEM` and `CSL_CITATION` Word split over separate `instrText` runs is no longer reported as broken.
+- `zotero_local.py import-*` adds `--expect-library-id` / `--expect-collection-id`, so a same-named collection in another library (e.g. a second *Inbox*) no longer passes the target check.
+- `build_import_file.py --ref-id` only exports references listed as `missing`; it can no longer export `ambiguous` or resolved ones and create duplicates.
+- A namespace-prefixed `docProps/custom.xml` (e.g. `<cp:Properties>`) now gets Zotero preferences instead of failing with "unexpected structure".
 
 ## [1.0.0] — 2026-09-18
 

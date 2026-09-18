@@ -172,6 +172,8 @@ def extract_zotero_fields(
 
     fields: list[dict[str, Any]] = []
     stack: list[dict[str, Any]] = []
+    all_instructions: list[str] = []
+    simple_instructions: list[str] = []
 
     for element in root.iter():
         name = local_name(element.tag)
@@ -225,12 +227,18 @@ def extract_zotero_fields(
                         errors,
                     )
                 )
-        elif name == "instrText" and stack:
-            stack[-1]["instruction"].append(element.text or "")
+        elif name == "instrText":
+            all_instructions.append(element.text or "")
+            if stack:
+                stack[-1]["instruction"].append(element.text or "")
+        elif name == "fldSimple":
+            simple_instructions.append(attribute(element, "instr") or "")
         elif name == "t" and stack and stack[-1]["hasSeparate"]:
             stack[-1]["visible"].append(element.text or "")
 
-    raw_count = xml_bytes.count(ZOTERO_PREFIX.encode("ascii"))
+    # count on the joined instruction text: Word may split the prefix across instrText runs
+    raw_count = ("".join(all_instructions).count(ZOTERO_PREFIX)
+                 + sum(s.count(ZOTERO_PREFIX) for s in simple_instructions))
     if raw_count != len(fields):
         errors.append(
             f"{part}: found {raw_count} Zotero instruction(s) but parsed "

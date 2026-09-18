@@ -52,7 +52,7 @@
 
 ### 为什么我的导入进了错误的集合？
 
-Zotero connector 会把条目导入 **Zotero 窗口中当前选中的集合**，没有可以指定集合的参数。请在批准**之前**选中集合。agent 会传入 `--expect-target`，如果选中项变了，导入就会被拒绝。见 [manual-steps.md § T4](manual-steps.md#t4)。
+Zotero connector 会把条目导入 **Zotero 窗口中当前选中的集合**，没有可以指定集合的参数。请在批准**之前**选中集合。agent 会传入 `--expect-target` 以及文库和集合 ID，如果选中项变了，导入就会被拒绝。见 [manual-steps.md § T4](manual-steps.md#t4)。
 
 <a id="group-library"></a>
 ### 可以引用群组文库中的条目吗？

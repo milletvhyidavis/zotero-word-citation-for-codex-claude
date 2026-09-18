@@ -260,7 +260,7 @@ All lines should say `[OK ]`. `microsoft-word` may say `NO` on macOS/Linux, whic
 2. **Click it** so it is selected.
 3. The agent runs `zotero_local.py selected-target` and tells you something like: *"18 records → collection 肿瘤免疫测试 in library My Library. Import?"*
 4. **Check the count and the target, then answer with a clear "yes".** "Go ahead and add citations" is *not* approval to import. The agent will ask explicitly.
-5. The agent imports with `--expect-target "<name>"`. If you clicked another collection in the meantime, the import **refuses** (exit 2). Re-select and confirm again.
+5. The agent imports with `--expect-target "<name>"` plus the library and collection IDs. If you clicked another collection (even one with the same name in another library) in the meantime, the import **refuses** (exit 2). Re-select and confirm again.
 
 > [!TIP]
 > All imported records carry the tag **`zwlc-import`** when the agent builds the RIS with `--tag zwlc-import`, which is the recommended default. That makes them easy to find, review or undo (see [A4](#a4-undo-an-import-if-needed)).

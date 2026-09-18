@@ -140,6 +140,31 @@ class InsertTests(unittest.TestCase):
         self.assertIn("output exists", err)
         self.assertEqual(sha256_file(src), before)
 
+    def test_report_path_cannot_overwrite_input_or_output(self):
+        src = make_docx(self.tmp / "in.docx", [run("Claim [@ref:R1].")])
+        before = sha256_file(src)
+        err = self.insert(src, "--placeholders", "--report", src, expect=2)
+        self.assertIn("--report must differ", err)
+        out = self.tmp / "cited.docx"
+        err = self.insert(src, "--placeholders", "--output", out, "--report", out, expect=2)
+        self.assertIn("--report must differ", err)
+        self.assertEqual(sha256_file(src), before)
+        self.assertFalse(out.exists())
+
+    def test_prefixed_custom_properties_are_extended(self):
+        ns = "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"
+        prefixed = (CUSTOM.replace(f'<Properties xmlns="{ns}"', f'<cp:Properties xmlns:cp="{ns}"')
+                    .replace("<property ", "<cp:property ").replace("</property>", "</cp:property>")
+                    .replace("</Properties>", "</cp:Properties>"))
+        src = make_docx(self.tmp / "in.docx", [run("A claim.")], custom_xml=prefixed)
+        pl = self.placements({"placements": [{"anchor": "A claim", "refs": ["R1"]}]})
+        report = self.insert(src, "--placements", pl, "--no-bibliography")
+        self.assertEqual(report["documentPreferences"], "added")
+        custom = read_part(Path(report["outputDocument"]), "docProps/custom.xml")
+        self.assertIn('<cp:property fmtid=', custom)
+        self.assertIn('name="ZOTERO_PREF_1"', custom)
+        self.assertIsNotNone(self.fields(Path(report["outputDocument"]))["documentPreferences"])
+
     def test_author_date_style_visible_text(self):
         src = make_docx(self.tmp / "in.docx", [run("Claim.")])
         pl = self.placements({"placements": [{"anchor": "Claim", "refs": ["R1", "R2"]}]})

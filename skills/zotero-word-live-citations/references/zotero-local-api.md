@@ -27,6 +27,6 @@ Requirement: Zotero 7+ running, Settings → Advanced → *Allow other applicati
 | current target | `POST /connector/getSelectedCollection` `{}` → `{libraryName, name, id, editable, targets[...]}` |
 | import RIS/BibTeX | `POST /connector/import?session=<uuid>` body = file text, `Content-Type: text/plain` |
 
-The connector imports into the library/collection **selected in the Zotero window**; there is no collection parameter. `import-*` therefore prints the target, refuses without `--yes`, and with `--expect-target NAME` refuses when the selection differs. The local API itself is read-only.
+The connector imports into the library/collection **selected in the Zotero window**; there is no collection parameter. `import-*` therefore prints the target, refuses without `--yes`, and with `--expect-target NAME`, `--expect-library-id ID` and `--expect-collection-id ID` (`null` = library root) refuses when the selection differs. Pass the IDs: collection names are not unique across libraries. The local API itself is read-only.
 
 Header `Zotero-API-Version: 3` is sent on `/api`, `X-Zotero-Connector-API-Version: 3` on `/connector`.

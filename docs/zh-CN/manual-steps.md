@@ -274,7 +274,7 @@ python ~/.claude/skills/zotero-word-live-citations/scripts/selftest.py
 2. **单击选中**这个集合。
 3. agent 运行 `zotero_local.py selected-target` 后会告诉你类似这样的话：*“18 条记录 → 文库 My Library 中的集合 肿瘤免疫测试，是否导入？”*
 4. **核对条数和目标，然后明确回复“同意”。** “继续加引用吧”这样的话*不算*对导入的批准，agent 会明确地单独询问你。
-5. agent 导入时会带上 `--expect-target "<集合名>"`。如果你在此期间点了别的集合，导入会被**拒绝**（退出码 2）。请重新选中并再次确认。
+5. agent 导入时会带上 `--expect-target "<集合名>"` 以及文库和集合 ID。如果你在此期间点了别的集合（包括其他文库中的同名集合），导入会被**拒绝**（退出码 2）。请重新选中并再次确认。
 
 > [!TIP]
 > agent 用 `--tag zwlc-import` 生成 RIS 时（推荐的默认做法），所有导入的记录都会带上 **`zwlc-import`** 标签，方便日后查找、检查或撤销（见 [A4](#a4)）。

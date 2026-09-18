@@ -132,6 +132,27 @@ class ValidatorTests(unittest.TestCase):
         self.assertEqual(portability["itemsWithoutEmbeddedData"], 1)
         self.assertEqual(portability["embeddedDataCoverage"], "partial")
 
+    def test_prefix_split_across_instr_text_runs_is_valid(self):
+        edited = self.root / "split.docx"
+        field = citation_field("split-1", ["ABCD1234"], "(A)")
+        split = field.replace(
+            "ZOTERO_ITEM CSL_CITATION",
+            'ZOTERO_ITEM</w:instrText></w:r><w:r><w:instrText xml:space="preserve"> CSL_CITATION',
+        )
+        make_docx(edited, split)
+        result = self.run_validator(edited, "--json")
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertEqual(json.loads(result.stdout)["zoteroFieldCount"], 1)
+
+    def test_orphan_instruction_outside_field_is_reported(self):
+        edited = self.root / "orphan.docx"
+        orphan = ('<w:r><w:instrText xml:space="preserve"> ADDIN ZOTERO_ITEM CSL_CITATION {}'
+                  "</w:instrText></w:r>")
+        make_docx(edited, citation_field("ok-1", ["ABCD1234"], "(A)") + orphan)
+        result = self.run_validator(edited, "--json")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("found 2 Zotero instruction(s)", result.stdout)
+
     def test_baseline_citations_must_survive(self):
         baseline = self.root / "received.docx"
         edited = self.root / "edited.docx"
