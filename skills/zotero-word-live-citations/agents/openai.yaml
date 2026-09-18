@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotero Word Live Citations"
+  short_description: "Write refreshable Zotero citation fields into Word"
+  default_prompt: "Use $zotero-word-live-citations to find supporting papers for my draft, match them to my Zotero library (import missing ones only after asking me), and produce a copy of the DOCX with live Zotero citations and a bibliography."

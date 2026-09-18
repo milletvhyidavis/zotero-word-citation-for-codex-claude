@@ -1,0 +1,21 @@
+{
+  "name": "zotero-word-live-citations",
+  "version": "1.0.0",
+  "description": "Find papers, match them to your Zotero Desktop library, import missing items with approval, and write live Zotero citation fields into Word DOCX files.",
+  "author": { "name": "codex-zotero-wordcitation contributors" },
+  "license": "MIT",
+  "keywords": ["zotero", "word", "docx", "citations", "bibliography"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Zotero Word Live Citations",
+    "shortDescription": "Live Zotero citation fields in Word documents",
+    "longDescription": "Search the literature, resolve references against your local Zotero library, import missing items after you approve, and insert real ADDIN ZOTERO_ITEM / ZOTERO_BIBL fields into a copy of your DOCX that Zotero's Word plugin can refresh.",
+    "category": "Education & Research",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "Add Zotero citations for these references to my manuscript.docx",
+      "Find papers supporting each claim in draft.md and produce a Word file with live Zotero citations",
+      "Check whether report.docx contains valid Zotero citation fields"
+    ]
+  }
+}

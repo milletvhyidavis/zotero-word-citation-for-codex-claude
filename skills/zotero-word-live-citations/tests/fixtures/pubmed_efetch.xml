@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<PubmedArticleSet>
+<PubmedArticle>
+  <MedlineCitation Status="MEDLINE" Owner="NLM">
+    <PMID Version="1">11502392</PMID>
+    <Article PubModel="Print">
+      <Journal>
+        <JournalIssue CitedMedium="Print"><Volume>11</Volume><Issue>4</Issue>
+          <PubDate><Year>2001</Year><Month>Aug</Month></PubDate></JournalIssue>
+        <Title>Current opinion in neurobiology</Title>
+      </Journal>
+      <ArticleTitle>The roles and functions of cutaneous <i>mechanoreceptors</i>.</ArticleTitle>
+      <Pagination><MedlinePgn>455-61</MedlinePgn></Pagination>
+      <Abstract><AbstractText>Combined psychophysical research.</AbstractText></Abstract>
+      <AuthorList><Author><LastName>Johnson</LastName><ForeName>K O</ForeName></Author></AuthorList>
+    </Article>
+  </MedlineCitation>
+  <PubmedData><ArticleIdList>
+    <ArticleId IdType="pubmed">11502392</ArticleId>
+    <ArticleId IdType="doi">10.1016/s0959-4388(00)00234-8</ArticleId>
+  </ArticleIdList></PubmedData>
+</PubmedArticle>
+</PubmedArticleSet>

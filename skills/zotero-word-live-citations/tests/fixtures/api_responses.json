@@ -1,0 +1,45 @@
+{
+  "crossref": {
+    "items": [
+      {
+        "DOI": "10.1016/S0959-4388(00)00234-8",
+        "type": "journal-article",
+        "title": ["The roles and functions of cutaneous mechanoreceptors"],
+        "author": [{"family": "Johnson", "given": "Kenneth O"}],
+        "container-title": ["Current Opinion in Neurobiology"],
+        "issued": {"date-parts": [[2001, 8]]},
+        "volume": "11", "issue": "4", "page": "455-461",
+        "abstract": "<jats:p>Combined psychophysical and neurophysiological research.</jats:p>",
+        "URL": "https://doi.org/10.1016/s0959-4388(00)00234-8"
+      }
+    ]
+  },
+  "openalex": {
+    "results": [
+      {
+        "id": "https://openalex.org/W1",
+        "doi": "https://doi.org/10.1038/nature13980",
+        "title": "Piezo2 is the principal mechanotransduction channel for proprioception",
+        "publication_year": 2015,
+        "type": "article",
+        "ids": {"pmid": "https://pubmed.ncbi.nlm.nih.gov/26551544"},
+        "authorships": [{"author": {"display_name": "Seung-Hyun Woo"}}, {"author": {"display_name": "Ardem Patapoutian"}}],
+        "primary_location": {"source": {"display_name": "Nature Neuroscience"}},
+        "biblio": {"volume": "18", "issue": "12", "first_page": "1756", "last_page": "1762"},
+        "abstract_inverted_index": {"Piezo2": [0], "senses": [1], "limb": [2], "position": [3]},
+        "cited_by_count": 700
+      },
+      {
+        "id": "https://openalex.org/W2",
+        "doi": "https://doi.org/10.1016/s0959-4388(00)00234-8",
+        "title": "The roles and functions of cutaneous mechanoreceptors",
+        "publication_year": 2001,
+        "type": "review",
+        "ids": {"pmid": "https://pubmed.ncbi.nlm.nih.gov/11502392"},
+        "authorships": [{"author": {"display_name": "Kenneth O. Johnson"}}],
+        "primary_location": {"source": {"display_name": "Current Opinion in Neurobiology"}},
+        "biblio": {"volume": "11", "issue": "4", "first_page": "455", "last_page": "461"}
+      }
+    ]
+  }
+}
