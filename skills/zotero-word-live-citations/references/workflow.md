@@ -19,7 +19,7 @@
 "$PY" $S/search_literature.py lookup --doi 10.1056/NEJMoa1003466 --out $W/lookup.json
 ```
 
-- Candidates carry `refId` `C1..Cn` per file. When combining several searches into one `refs.json`, give every chosen record a unique `refId` (e.g. the marker id) — keep the rest of the record unchanged.
+- Candidates carry `refId` `C1..Cn` per file. When combining several searches into one `refs.json`, give every chosen record a unique `refId` (e.g. the marker id) — keep the rest of the record unchanged. `resolve_references.py` rejects duplicate refIds.
 - Choose by reading title + abstract; prefer landmark primary studies and authoritative reviews; record which claim each supports.
 
 ## C. Existing DOCX, citations to add, text must stay unchanged

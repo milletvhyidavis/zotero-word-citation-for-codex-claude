@@ -250,16 +250,29 @@ def merge_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return merged
 
 
-def lookup(dois: list[str], pmids: list[str], mailto: str | None, timeout: float) -> list[dict[str, Any]]:
+def lookup(dois: list[str], pmids: list[str], mailto: str | None, timeout: float
+           ) -> tuple[list[dict[str, Any]], list[str]]:
+    """Records for the DOIs/PMIDs that exist, plus one message per identifier that failed."""
     found: list[dict[str, Any]] = []
+    failures: list[str] = []
     for raw in dois:
         doi = normalize_doi(raw)
         if not doi:
-            raise ValueError(f"not a DOI: {raw}")
+            failures.append(f"not a DOI: {raw}")
+            continue
         url = f"{CROSSREF}/{urllib.parse.quote(doi)}" + (f"?mailto={urllib.parse.quote(mailto)}" if mailto else "")
-        found.extend(parse_crossref(_get(url, timeout).json()["message"]))
-    found.extend(pubmed_fetch([p for p in pmids if p.isdigit()], timeout))
-    return merge_records(found)
+        try:
+            found.extend(parse_crossref(_get(url, timeout).json()["message"]))
+        except ConnectionError as exc:  # e.g. 404 for a DOI that does not exist
+            failures.append(f"DOI {doi}: {exc}")
+    bad_pmids = [p for p in pmids if not p.strip().isdigit()]
+    failures += [f"not a PMID: {p}" for p in bad_pmids]
+    good = [p.strip() for p in pmids if p.strip().isdigit()]
+    records = pubmed_fetch(good, timeout)
+    returned = {r["pmid"] for r in records}
+    failures += [f"PMID {p}: not found in PubMed" for p in good if p not in returned]
+    found.extend(records)
+    return merge_records(found), failures
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -288,8 +301,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "lookup":
             if not args.doi and not args.pmid:
                 parser.error("lookup needs --doi and/or --pmid")
-            dump_json(lookup(args.doi, args.pmid, args.mailto, args.timeout), args.out)
-            return EXIT_OK
+            records, failures = lookup(args.doi, args.pmid, args.mailto, args.timeout)
+            for message in failures:
+                print(f"WARNING: {message}", file=sys.stderr)
+            dump_json(records, args.out)
+            return EXIT_FAIL if failures else EXIT_OK
         sources = [s.strip() for s in args.source.split(",") if s.strip()]
         unknown = set(sources) - set(SEARCHERS)
         if unknown:

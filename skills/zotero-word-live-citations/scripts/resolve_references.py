@@ -130,12 +130,14 @@ def load_references(path: Path) -> list[dict[str, Any]]:
         records = parse_ris(path.read_text(encoding="utf-8-sig"))
     else:
         records = parse_text(path.read_text(encoding="utf-8-sig"))
-    seen: set[str] = set()
+    seen: dict[str, int] = {}
     for n, rec in enumerate(records, 1):
         rid = str(rec.get("refId") or n)
         if rid in seen:
-            rid = f"{rid}-{n}"
-        seen.add(rid)
+            # e.g. two search outputs both numbered C1..Cn: a [@ref:C1] marker would be ambiguous
+            raise ValueError(f"duplicate refId {rid!r} (records {seen[rid]} and {n}); "
+                             "give every record a unique refId, e.g. its marker id")
+        seen[rid] = n
         rec["refId"] = rid
         rec["doi"] = normalize_doi(rec.get("doi"))
         rec["pmid"] = str(rec["pmid"]) if rec.get("pmid") else None

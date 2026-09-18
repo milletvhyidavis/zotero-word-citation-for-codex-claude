@@ -176,7 +176,7 @@ Output record (shared by the resolve and build scripts):
 python "$S/search_literature.py" lookup --doi 10.1056/NEJMoa1003466 --pmid 15032581 --out zotero-work/lookup.json
 ```
 
-`--doi` and `--pmid` can be repeated. Use `lookup` for any DOI that came from memory, a colleague or another tool. **If lookup fails, the reference is not used.**
+`--doi` and `--pmid` can be repeated. Use `lookup` for any DOI that came from memory, a colleague or another tool. Identifiers that are found are written to the output; each one that fails is reported as a `WARNING` and the exit code is 1. **If lookup fails for a reference, that reference is not used.**
 
 > [!WARNING]
 > **You are responsible for the scientific choice of papers.** The agent is not allowed to cite a paper that no tool returned, and it must not invent DOIs. Whether a paper actually supports your claim is still your judgement. Read the claim → paper list the agent shows you before anything is imported or inserted.
@@ -357,7 +357,7 @@ python "$S/md_to_docx.py" --input zotero-work/review.md --output zotero-work/rev
 | `--east-asia-font` | `SimSun` | CJK font (e.g. `SimSun` / 宋体, `Microsoft YaHei`) |
 | `--force` | off | overwrite an existing output |
 
-Supported Markdown: `#`–`###` headings (the first `#` becomes the document Title), paragraphs, `-`/`*` bullets, `1.` numbered lines (kept as plain text), `**bold**`, `*italic*`. Tables, images, links and footnotes are **not** converted. Citation markers are kept verbatim for the next step.
+Supported Markdown: `#`–`######` headings (the first `#` becomes the document Title; `####` and deeper use the level-3 style), paragraphs, `-`/`*` bullets, `1.` numbered lines (kept as plain text), `**bold**`, `*italic*`. Tables, images, links and footnotes are **not** converted. Citation markers are kept verbatim for the next step.
 
 ### Placeholder syntax
 
@@ -587,7 +587,7 @@ The convention for all scripts: **0** success · **1** validation failure, or un
 | Script | 0 | 1 | 2 |
 |---|---|---|---|
 | `selftest.py` | Python + DOCX pipeline OK (with `--strict`: also Zotero readable) | an essential check failed | bad arguments |
-| `search_literature.py` | results written | every source failed / lookup failed | bad arguments / unexpected error |
+| `search_literature.py` | results written | every source failed / some lookup failed | bad arguments / unexpected error |
 | `resolve_references.py` | everything resolved | some missing or ambiguous (map written) | bad input, Zotero unreachable |
 | `build_import_file.py` | file written (or nothing to export) | some records skipped / none exportable | map unreadable |
 | `zotero_local.py` | success | connection error, import failed, `status` not OK | refused (no `--yes`, `--expect-target` mismatch, target not editable, empty file) |

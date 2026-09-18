@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Convert a simple Markdown manuscript to a clean DOCX (stdlib only).
 
-Supported: '#'..'###' headings (the first '#' becomes the Title), paragraphs,
+Supported: '#'..'######' headings (4-6 map to Heading3) (the first '#' becomes the Title), paragraphs,
 '- ' / '* ' bullets, '1. ' numbered lines (kept as text), **bold**, *italic*,
 and blank-line paragraph breaks. Citation markers such as [@ref:C3; @ref:C7]
 are kept verbatim so insert_zotero_fields.py --placeholders can turn them into
@@ -58,10 +58,10 @@ def convert(md: str) -> str:
 
     for line in md.splitlines():
         stripped = line.strip()
-        m = re.match(r"^(#{1,3})\s+(.*)$", stripped)
+        m = re.match(r"^(#{1,6})\s+(.*)$", stripped)
         if m:
             flush()
-            level = len(m.group(1))
+            level = min(len(m.group(1)), 3)  # only Heading1-3 styles exist
             if level == 1 and not title_used:
                 body.append(paragraph(m.group(2), "Title"))
                 title_used = True

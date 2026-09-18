@@ -181,7 +181,7 @@ python "$S/search_literature.py" search "cancer immunoediting elimination equili
 python "$S/search_literature.py" lookup --doi 10.1056/NEJMoa1003466 --pmid 15032581 --out zotero-work/lookup.json
 ```
 
-`--doi` 和 `--pmid` 都可以重复使用。凡是来自记忆、同事或其他工具的 DOI，都要先用 `lookup` 核实。**lookup 失败的文献一律不用。**
+`--doi` 和 `--pmid` 都可以重复使用。凡是来自记忆、同事或其他工具的 DOI，都要先用 `lookup` 核实。查到的会正常写出；查不到的逐条显示 `WARNING`，退出码为 1。**lookup 失败的文献一律不用。**
 
 > [!WARNING]
 > **文献的学术选择由你负责。** agent 不得引用任何工具都没有返回过的论文，也不得编造 DOI。但一篇论文是否真能支撑你的论断，仍需你来判断。在导入或写入之前，请认真阅读 agent 给出的“论断 → 文献”清单。
@@ -365,7 +365,7 @@ python "$S/md_to_docx.py" --input zotero-work/review.md --output zotero-work/rev
 | `--east-asia-font` | `SimSun` | 中文字体（例如 `SimSun` / 宋体、`Microsoft YaHei` / 微软雅黑） |
 | `--force` | 关 | 覆盖已存在的输出文件 |
 
-支持的 Markdown：`#`–`###` 标题（第一个 `#` 会成为文档标题），段落，`-`/`*` 无序列表，`1.` 编号行（按普通文本保留），`**粗体**`，`*斜体*`。表格、图片、链接和脚注**不会**被转换。引用标记会原样保留，留给下一步处理。
+支持的 Markdown：`#`–`######` 标题（第一个 `#` 会成为文档标题；`####` 及更深的标题按三级标题处理），段落，`-`/`*` 无序列表，`1.` 编号行（按普通文本保留），`**粗体**`，`*斜体*`。表格、图片、链接和脚注**不会**被转换。引用标记会原样保留，留给下一步处理。
 
 <a id="placeholder-syntax"></a>
 ### 引用标记语法
@@ -606,7 +606,7 @@ agent 完成时，“Zotero Refresh: left to user”（留给用户）是正常�
 | 脚本 | 0 | 1 | 2 |
 |---|---|---|---|
 | `selftest.py` | Python 和 DOCX 流程正常（`--strict` 时还要求 Zotero 可读） | 某项必要检查失败 | 参数错误 |
-| `search_literature.py` | 结果已写出 | 所有来源都失败 / lookup 失败 | 参数错误 / 意外错误 |
+| `search_literature.py` | 结果已写出 | 所有来源都失败 / 有 lookup 失败 | 参数错误 / 意外错误 |
 | `resolve_references.py` | 全部匹配成功 | 有缺失或歧义（map 已写出） | 输入有误、无法连接 Zotero |
 | `build_import_file.py` | 文件已写出（或没有要导出的内容） | 有记录被跳过 / 没有可导出的记录 | map 无法读取 |
 | `zotero_local.py` | 成功 | 连接错误、导入失败、`status` 不正常 | 拒绝执行（没有 `--yes`、`--expect-target` 不符、目标不可编辑、文件为空） |

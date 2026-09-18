@@ -71,7 +71,7 @@ STYLE_ALIASES = {
     "gb-t-7714-numeric": "http://www.zotero.org/styles/china-national-standard-gb-t-7714-2015-numeric",
     "gb-t-7714-author-date": "http://www.zotero.org/styles/china-national-standard-gb-t-7714-2015-author-date",
 }
-AUTHOR_DATE_HINTS = ("apa", "author-date", "harvard", "chicago-author")
+AUTHOR_DATE_RE = re.compile(r"(^|-)(apa|harvard)(-|$)|author-date|chicago-author")
 
 RUN_RE = re.compile(r"<w:r(?:\s[^>]*)?>.*?</w:r>", re.S)
 RUN_OPEN_RE = re.compile(r"<w:r(?:\s[^>]*)?>")
@@ -488,16 +488,37 @@ def plan_placeholders(doc: str, paras: list[Para], pool: ItemPool) -> list[dict[
     return ops
 
 
+INSTR_TOKEN_RE = re.compile(r"<w:fldChar\b[^>]*w:fldCharType=\"(begin|separate|end)\"[^>]*>|"
+                            r"<w:instrText(?:\s[^>]*)?>(.*?)</w:instrText>", re.S)
+
+
 def existing_citations(doc: str) -> tuple[set[str], list[tuple[int, list[str]]], bool]:
-    ids, fields = set(), []
-    for m in re.finditer(r"ADDIN ZOTERO_ITEM CSL_CITATION\s*(\{.*?\})\s*</w:instrText>", doc, re.S):
-        try:
-            data = json.loads(html.unescape(m.group(1)))
-        except json.JSONDecodeError:
-            continue
-        ids.add(str(data.get("citationID")))
-        fields.append((m.start(), [u for it in data.get("citationItems", []) for u in it.get("uris", [])[:1]]))
-    return ids, fields, "ADDIN ZOTERO_BIBL" in doc
+    """Existing Zotero fields; Word often splits one instruction over several instrText runs."""
+    ids, fields, has_bibl = set(), [], False
+    stack: list[tuple[int, list[str]]] = []
+    for m in INSTR_TOKEN_RE.finditer(doc):
+        kind = m.group(1)
+        if kind == "begin":
+            stack.append((m.start(), []))
+        elif kind is None:
+            if stack:
+                stack[-1][1].append(html.unescape(m.group(2)))
+        elif stack:
+            start, chunks = stack.pop() if kind == "end" else stack[-1]
+            if kind == "separate":
+                stack[-1] = (start, [])  # instruction complete; ignore later text
+            code = "".join(chunks).strip()
+            if code.startswith("ADDIN ZOTERO_BIBL"):
+                has_bibl = True
+            elif code.startswith("ADDIN ZOTERO_ITEM"):
+                try:
+                    data = json.loads(code[code.index("{"):code.rindex("}") + 1])
+                except ValueError:
+                    continue
+                ids.add(str(data.get("citationID")))
+                fields.append((start, [u for it in data.get("citationItems", [])
+                                       for u in it.get("uris", [])[:1]]))
+    return ids, fields, has_bibl
 
 
 def build(args: argparse.Namespace) -> dict[str, Any]:
@@ -546,7 +567,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
 
     style_id = STYLE_ALIASES.get(args.style, args.style)
     author_date = args.visible == "author-date" or (
-        args.visible == "auto" and any(h in style_id for h in AUTHOR_DATE_HINTS))
+        args.visible == "auto" and AUTHOR_DATE_RE.search(style_id.rstrip("/").rsplit("/", 1)[-1]))
 
     existing_ids, existing_fields, has_bibl = existing_citations(doc)
     # provisional numbering in document order over existing + new citations

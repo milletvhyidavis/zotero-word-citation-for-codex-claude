@@ -18,6 +18,11 @@ All notable changes to this project are documented here. The format follows [Kee
 - 锁定的 `zoteroKey` 不存在时，归入 `missing`，而不是以“Zotero not reachable”中止整个匹配。
 - `build_import_file.py` 不再导出“已在文库中但无法引用”的条目（例如未同步文库），避免重复导入。
 - 作者–年份临时文字在缺少年份时显示 `n.d.`；保留原有 Zotero 首选项时，报告中显示文档实际使用的样式。
+- 文档中已有的 Zotero 引用，如果被 Word 拆成多段域代码，现在也能识别，新引用的临时编号不再出错。
+- 输入里出现重复的 refId（例如两次检索结果都从 C1 开始编号）时直接报错，不再悄悄改名，避免 `[@ref:C1]` 引错文献。
+- `search_literature.py lookup` 中某个 DOI/PMID 查不到时，其余结果照常输出，失败项逐条警告，不再整批中止。
+- 样式名只是包含 “apa” 字样（如 japanese-…）时，不再被误判为作者–年份格式。
+- `md_to_docx.py` 支持 `####` 及更深的标题，不再把 `####` 原样留在正文中。
 
 ### Changed (English)
 
@@ -31,6 +36,11 @@ All notable changes to this project are documented here. The format follows [Kee
 - A pinned `zoteroKey` that does not exist now lands in `missing` instead of aborting the whole run with "Zotero not reachable".
 - `build_import_file.py` no longer exports references that are already in the library but not citable (e.g. unsynced library), which would have created duplicates.
 - Author–date provisional text shows `n.d.` for items without a year; the report shows the document's real style when existing Zotero preferences are kept.
+- Existing Zotero citations whose field code Word split over several runs are now recognised, so provisional numbering of new citations is correct.
+- Duplicate refIds in the input (e.g. two search outputs both numbered from C1) are rejected instead of silently renamed, so `[@ref:C1]` cannot cite the wrong paper.
+- `search_literature.py lookup` keeps the records it found when one DOI/PMID fails, warning per failure instead of aborting the whole batch.
+- Style names that merely contain “apa” (e.g. japanese-…) are no longer treated as author–date.
+- `md_to_docx.py` handles `####` and deeper headings instead of leaving `####` in the text.
 
 ## [1.0.0] — 2026-09-18
 

@@ -271,5 +271,27 @@ class DeploymentBugTests(unittest.TestCase):
             server.server_close()
         self.assertTrue(response.ok, response.error)
 
+
+    def test_duplicate_ref_ids_are_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "refs.json"
+            path.write_text(json.dumps([{"refId": "C1", "title": "A"}, {"refId": "C1", "title": "B"}]),
+                            encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "duplicate refId 'C1'"):
+                rr.load_references(path)
+
+    def test_lookup_keeps_good_records_when_one_doi_fails(self):
+        from unittest import mock
+
+        def fake_get(url, timeout):
+            if "10.9999" in url:
+                raise ConnectionError("status=404")
+            return mock.Mock(json=lambda: {"message": {"DOI": "10.1000/ok", "title": ["Real"]}})
+
+        with mock.patch.object(sl, "_get", fake_get), mock.patch.object(sl, "pubmed_fetch", lambda ids, t: []):
+            records, failures = sl.lookup(["10.1000/ok", "10.9999/nope", "junk"], ["123"], None, 5)
+        self.assertEqual([r["doi"] for r in records], ["10.1000/ok"])
+        self.assertEqual(len(failures), 3)
+
 if __name__ == "__main__":
     unittest.main()

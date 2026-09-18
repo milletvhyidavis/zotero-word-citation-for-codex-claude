@@ -147,5 +147,32 @@ class InsertTests(unittest.TestCase):
         self.assertEqual(report["placements"][0]["visibleText"], "(Smith, 2020; Smith, 2019)")
 
 
+    def test_existing_citation_with_split_instruction_is_numbered(self):
+        # Word often splits one field instruction over several instrText runs
+        field = zotero_field("oldCite1", "ZZZZ9999")
+        head, sep, tail = field.partition('CSL_CITATION ')
+        split = head + sep + '</w:instrText></w:r><w:r><w:instrText xml:space="preserve">' + tail
+        ids, fields, has_bibl = ins.existing_citations(split)
+        self.assertEqual(ids, {"oldCite1"})
+        self.assertEqual(fields[0][1], ["http://zotero.org/users/111/items/ZZZZ9999"])
+        self.assertFalse(has_bibl)
+        src = make_docx(self.tmp / "in.docx", [run("Old claim") + split + run(". New claim here.")])
+        pl = self.placements({"placements": [{"anchor": "New claim here", "refs": ["R1"]}]})
+        report = self.insert(src, "--placements", pl, "--no-bibliography")
+        self.assertEqual(report["placements"][0]["visibleText"], "[2]")
+
+    def test_author_date_detection_uses_style_name(self):
+        self.assertTrue(ins.AUTHOR_DATE_RE.search("apa"))
+        self.assertTrue(ins.AUTHOR_DATE_RE.search("apa-6th-edition"))
+        self.assertTrue(ins.AUTHOR_DATE_RE.search("elsevier-harvard"))
+        self.assertFalse(ins.AUTHOR_DATE_RE.search("japanese-journal-of-applied-physics"))
+        self.assertFalse(ins.AUTHOR_DATE_RE.search("vancouver"))
+
+    def test_deep_markdown_headings_become_heading3(self):
+        import md_to_docx
+        body = md_to_docx.convert("# T\n\n#### Deep\n")
+        self.assertIn('<w:pStyle w:val="Heading3"/>', body)
+        self.assertNotIn("####", body)
+
 if __name__ == "__main__":
     unittest.main()
