@@ -23,7 +23,8 @@
 - [常见问题](#常见问题)
 - [安全保证](#安全保证)
 - [支持的引文格式](#支持的引文格式)
-- [许可与致谢](#许可与致谢)
+- [致谢](#致谢)
+- [许可](#许可)
 
 ## 准备工作
 
@@ -300,8 +301,16 @@ zotero-word-citation-for-codex-claude/
 | agent 工作流程（英文） | [SKILL.md](skills/zotero-word-live-citations/SKILL.md) · [references/](skills/zotero-word-live-citations/references/) | |
 | 更新日志 · 贡献 · 安全 | [CHANGELOG.md](CHANGELOG.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) | 同左（中英双语） |
 
-## 许可与致谢
+## 致谢
 
-本项目采用 [MIT 许可](LICENSE)。部分代码改编自 [drguptavivek/zotero-use](https://github.com/drguptavivek/zotero-use)（DOCX 验证器、域安全规则）和 [openai/plugins](https://github.com/openai/plugins) 中的 Zotero 插件（本地 API / connector 工具函数），二者均为 MIT 许可。具体改编内容见 [NOTICE](NOTICE)。
+- **[drguptavivek/zotero-use](https://github.com/drguptavivek/zotero-use)**（作者 [Vivek Gupta](https://github.com/drguptavivek)，MIT 许可）：本项目的 DOCX 验证器（`validate_zotero_docx.py`）及其部分测试改编自该项目，Zotero 域的安全规则也参考了它。
+- **[openai/plugins](https://github.com/openai/plugins) 中的 Zotero 插件**（OpenAI，MIT 许可）：本项目访问 Zotero 本地 API 的 HTTP 工具函数和 connector 导入流程改编自该插件（已移除修改设置、重启 Zotero 等功能）。
+- **[Anthropic](https://www.anthropic.com) 的 [Claude Code](https://claude.com/claude-code)**：本项目在 Claude Code 的协助下开发，提交记录中的 `Co-Authored-By: Claude` 即来源于此。
+
+具体改编了哪些文件，以及原项目的版权声明，见 [NOTICE](NOTICE)。
+
+## 许可
+
+本项目采用 [MIT 许可](LICENSE)。
 
 Zotero 是 Corporation for Digital Scholarship 的商标。本项目与 Zotero、Microsoft、Anthropic、OpenAI 均无隶属或背书关系。

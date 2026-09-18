@@ -14,4 +14,6 @@ MIT-licensed projects. Their copyright notices are retained here.
 
 Both are distributed under the MIT License; see LICENSE for the license text.
 Zotero is a trademark of the Corporation for Digital Scholarship. This project is
-not affiliated with or endorsed by Zotero, Microsoft or OpenAI.
+not affiliated with or endorsed by Zotero, Microsoft, Anthropic or OpenAI.
+
+Development was assisted by Claude Code (Anthropic).

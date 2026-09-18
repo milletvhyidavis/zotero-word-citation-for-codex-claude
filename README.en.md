@@ -24,7 +24,8 @@ Your original document is never changed. The agent never installs software for y
 - [Safety guarantees](#safety-guarantees)
 - [Citation styles](#citation-styles)
 - [Advanced](#advanced)
-- [License and credits](#license-and-credits)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
 
 ## Before you start
 
@@ -361,8 +362,16 @@ zotero-word-citation-for-codex-claude/
 | Agent workflow | [SKILL.md](skills/zotero-word-live-citations/SKILL.md) · [references/](skills/zotero-word-live-citations/references/) | |
 | Changes · Contributing · Security | [CHANGELOG.md](CHANGELOG.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) | same files (bilingual) |
 
-## License and credits
+## Acknowledgements
 
-Released under the [MIT License](LICENSE). Parts of the code are adapted from [drguptavivek/zotero-use](https://github.com/drguptavivek/zotero-use) (DOCX validator, field-safety rules) and the Zotero plugin in [openai/plugins](https://github.com/openai/plugins) (local API/connector helpers), both MIT-licensed. [NOTICE](NOTICE) lists what was adapted from each.
+- **[drguptavivek/zotero-use](https://github.com/drguptavivek/zotero-use)** (by [Vivek Gupta](https://github.com/drguptavivek), MIT License): the DOCX validator (`validate_zotero_docx.py`) and part of its tests are adapted from this project, and the Zotero field-safety rules follow it.
+- **The Zotero plugin in [openai/plugins](https://github.com/openai/plugins)** (OpenAI, MIT License): the HTTP helpers for the Zotero local API and the connector import flow are adapted from it (settings-changing and Zotero-restart features removed).
+- **[Claude Code](https://claude.com/claude-code) by [Anthropic](https://www.anthropic.com)**: this project was developed with the help of Claude Code, which is where the `Co-Authored-By: Claude` lines in the commit history come from.
+
+[NOTICE](NOTICE) lists exactly which files were adapted and keeps the original copyright notices.
+
+## License
+
+Released under the [MIT License](LICENSE).
 
 Zotero is a trademark of the Corporation for Digital Scholarship. This project is not affiliated with or endorsed by Zotero, Microsoft, Anthropic or OpenAI.
