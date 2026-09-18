@@ -1,23 +1,10 @@
-# Changelog · 更新日志
-
-All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
+# 更新日志 · Changelog
 
 本文件记录项目的所有重要变更，格式参照 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
+All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
+
 ## [Unreleased]
-
-### Changed (English)
-
-- First-use setup: enabling Zotero's local API is now a **required** step, confirmed by a screenshot the user sends the agent. Zotero sign-in is checked automatically; the user is asked to sign in (with a screenshot) only when it is missing. The agent guides Python installation from python.org when none is found. **WPS is explicitly unsupported.** Citation styles no longer need to be installed in advance.
-- `zotero_local.py status` reports `loggedIn` / `userLibraryId`; `selftest.py` adds a `zotero-logged-in` check.
-
-### Fixed (English)
-
-- Requests to the local Zotero server no longer go through `HTTP(S)_PROXY` (previously failed when a proxy was set without `NO_PROXY`).
-- `[@doi:…]` with an unparsable DOI no longer silently cites an unrelated item that has no DOI.
-- A pinned `zoteroKey` that does not exist now lands in `missing` instead of aborting the whole run with "Zotero not reachable".
-- `build_import_file.py` no longer exports references that are already in the library but not citable (e.g. unsynced library), which would have created duplicates.
-- Author–date provisional text shows `n.d.` for items without a year; the report shows the document's real style when existing Zotero preferences are kept.
 
 ### 变更（中文）
 
@@ -32,30 +19,22 @@ All notable changes to this project are documented here. The format follows [Kee
 - `build_import_file.py` 不再导出“已在文库中但无法引用”的条目（例如未同步文库），避免重复导入。
 - 作者–年份临时文字在缺少年份时显示 `n.d.`；保留原有 Zotero 首选项时，报告中显示文档实际使用的样式。
 
+### Changed (English)
+
+- First-use setup: enabling Zotero's local API is now a **required** step, confirmed by a screenshot the user sends the agent. Zotero sign-in is checked automatically; the user is asked to sign in (with a screenshot) only when it is missing. The agent guides Python installation from python.org when none is found. **WPS is explicitly unsupported.** Citation styles no longer need to be installed in advance.
+- `zotero_local.py status` reports `loggedIn` / `userLibraryId`; `selftest.py` adds a `zotero-logged-in` check.
+
+### Fixed (English)
+
+- Requests to the local Zotero server no longer go through `HTTP(S)_PROXY` (previously failed when a proxy was set without `NO_PROXY`).
+- `[@doi:…]` with an unparsable DOI no longer silently cites an unrelated item that has no DOI.
+- A pinned `zoteroKey` that does not exist now lands in `missing` instead of aborting the whole run with "Zotero not reachable".
+- `build_import_file.py` no longer exports references that are already in the library but not citable (e.g. unsynced library), which would have created duplicates.
+- Author–date provisional text shows `n.d.` for items without a year; the report shows the document's real style when existing Zotero preferences are kept.
+
 ## [1.0.0] — 2026-09-18
 
 Initial public release. · 首个公开版本。
-
-### Added (English)
-
-- Agent skill `zotero-word-live-citations` for **Claude Code** and **OpenAI Codex** (`SKILL.md`, reference docs, `agents/openai.yaml`).
-- `search_literature.py`: `search` across OpenAlex, PubMed and Crossref, with records merged by DOI/PMID, and `lookup` for canonical metadata by DOI/PMID. Supports `ZWLC_MAILTO` and `NCBI_API_KEY`.
-- `resolve_references.py`: read-only matching of JSON/RIS/plain-text references to Zotero parent items (pinned `zoteroKey` > DOI > PMID > exact title > title + author + year). Ambiguous matches are never auto-picked, and duplicates are reported. Group libraries are supported via `--library group:<id>`.
-- `build_import_file.py`: RIS/BibTeX for missing references, with optional tags (e.g. `zwlc-import`).
-- `zotero_local.py`: `status`, `search`, `item`, `collections`, `groups`, `selected-target`, and approval-gated `import-ris` / `import-bibtex` (`--yes`, `--expect-target`).
-- `md_to_docx.py`: minimal Markdown → DOCX with CJK font support, keeping citation markers.
-- `insert_zotero_fields.py`: real `ADDIN ZOTERO_ITEM CSL_CITATION` fields with embedded `itemData`, a `ZOTERO_BIBL` bibliography field and `ZOTERO_PREF_n` document preferences, written into a copy (`<stem>-zotero-cited.docx`). Supports placeholder mode, `placements.json` mode, `--list-paragraphs`, `--dry-run`, style aliases (incl. GB/T 7714-2015) and any CSL style URL, self-validation and a JSON report.
-- `validate_zotero_docx.py`: structural validation of DOCX packages and Zotero fields, including baseline preservation, `itemData` coverage, namespace, bibliography and style checks.
-- `word_render.py`: optional Word COM rendering to PDF on Windows (read-only copy, no Refresh).
-- `selftest.py`: environment and capability check.
-- `install.py`: installer for Claude Code (`~/.claude/skills`), Codex (`$CODEX_HOME/skills`) or a project folder, with `--dry-run`, `--force` and `--uninstall`.
-- Claude Code plugin/marketplace manifests (`.claude-plugin/`) and a Codex plugin manifest (`.codex-plugin/`).
-- Bilingual documentation (English / Simplified Chinese): README, installation, usage, manual-steps checklist, troubleshooting, FAQ, publishing guide, contributing and security policy.
-- Unit test suite (38 tests, standard library `unittest`).
-
-### Verified
-
-- End-to-end on Windows 11 + Zotero 10.0.2 + Word 16 (Microsoft 365) with the Zotero Word add-in: 18 references imported with approval and matched by DOI, 17 citation fields + bibliography in GB/T 7714-2015 numeric (zh-CN), structural validation passed, Word rendering passed, and **Zotero Refresh in Word succeeded**.
 
 ### 新增（中文）
 
@@ -78,4 +57,25 @@ Initial public release. · 首个公开版本。
 
 - 在 Windows 11 + Zotero 10.0.2 + Word 16（Microsoft 365）+ Zotero Word 插件环境下完成端到端测试：18 篇文献经用户批准后导入并全部按 DOI 匹配成功，生成 17 个引用域和参考文献表，样式为 GB/T 7714-2015 顺序编码制（zh-CN）。结构验证通过，Word 渲染通过，**用户在 Word 中执行 Zotero Refresh 成功**。
 
-[1.0.0]: https://github.com/milletvhyidavis/zotero-word-live-citations/releases/tag/v1.0.0
+### Added (English)
+
+- Agent skill `zotero-word-live-citations` for **Claude Code** and **OpenAI Codex** (`SKILL.md`, reference docs, `agents/openai.yaml`).
+- `search_literature.py`: `search` across OpenAlex, PubMed and Crossref, with records merged by DOI/PMID, and `lookup` for canonical metadata by DOI/PMID. Supports `ZWLC_MAILTO` and `NCBI_API_KEY`.
+- `resolve_references.py`: read-only matching of JSON/RIS/plain-text references to Zotero parent items (pinned `zoteroKey` > DOI > PMID > exact title > title + author + year). Ambiguous matches are never auto-picked, and duplicates are reported. Group libraries are supported via `--library group:<id>`.
+- `build_import_file.py`: RIS/BibTeX for missing references, with optional tags (e.g. `zwlc-import`).
+- `zotero_local.py`: `status`, `search`, `item`, `collections`, `groups`, `selected-target`, and approval-gated `import-ris` / `import-bibtex` (`--yes`, `--expect-target`).
+- `md_to_docx.py`: minimal Markdown → DOCX with CJK font support, keeping citation markers.
+- `insert_zotero_fields.py`: real `ADDIN ZOTERO_ITEM CSL_CITATION` fields with embedded `itemData`, a `ZOTERO_BIBL` bibliography field and `ZOTERO_PREF_n` document preferences, written into a copy (`<stem>-zotero-cited.docx`). Supports placeholder mode, `placements.json` mode, `--list-paragraphs`, `--dry-run`, style aliases (incl. GB/T 7714-2015) and any CSL style URL, self-validation and a JSON report.
+- `validate_zotero_docx.py`: structural validation of DOCX packages and Zotero fields, including baseline preservation, `itemData` coverage, namespace, bibliography and style checks.
+- `word_render.py`: optional Word COM rendering to PDF on Windows (read-only copy, no Refresh).
+- `selftest.py`: environment and capability check.
+- `install.py`: installer for Claude Code (`~/.claude/skills`), Codex (`$CODEX_HOME/skills`) or a project folder, with `--dry-run`, `--force` and `--uninstall`.
+- Claude Code plugin/marketplace manifests (`.claude-plugin/`) and a Codex plugin manifest (`.codex-plugin/`).
+- Bilingual documentation (English / Simplified Chinese): README, installation, usage, manual-steps checklist, troubleshooting, FAQ, publishing guide, contributing and security policy.
+- Unit test suite (38 tests, standard library `unittest`).
+
+### Verified
+
+- End-to-end on Windows 11 + Zotero 10.0.2 + Word 16 (Microsoft 365) with the Zotero Word add-in: 18 references imported with approval and matched by DOI, 17 citation fields + bibliography in GB/T 7714-2015 numeric (zh-CN), structural validation passed, Word rendering passed, and **Zotero Refresh in Word succeeded**.
+
+[1.0.0]: https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude/releases/tag/v1.0.0

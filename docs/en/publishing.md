@@ -1,11 +1,11 @@
 # Publishing guide (for maintainers)
 
-[简体中文](../zh-CN/publishing.md) · [Back to README](../../README.md)
+[简体中文](../zh-CN/publishing.md) · [Back to README](../../README.en.md)
 
 This page is for whoever publishes the repository on GitHub. Users of the skill don't need it.
 
 > [!IMPORTANT]
-> **About `<owner>`.** Every GitHub URL and marketplace command in the documentation uses the placeholder **`<owner>`** for the GitHub user or organisation that will own the repository, e.g. `https://github.com/<owner>/zotero-word-live-citations`. It is used on purpose so that it can be replaced in one pass once the owner is known ([step 4](#4-replace-owner)). This guide itself keeps `<owner>` as a placeholder and is excluded from that replacement.
+> **About `<owner>`.** Every GitHub URL and marketplace command in the documentation uses the placeholder **`<owner>`** for the GitHub user or organisation that will own the repository, e.g. `https://github.com/<owner>/zotero-word-citation-for-codex-claude`. It is used on purpose so that it can be replaced in one pass once the owner is known ([step 4](#4-replace-owner)). This guide itself keeps `<owner>` as a placeholder and is excluded from that replacement.
 
 ## Contents
 
@@ -60,14 +60,14 @@ Work through this list in the repository root before the first push.
 
 4. **Optional personalisation** (these are code/metadata files, so review any change yourself):
    - `LICENSE`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` and `.codex-plugin/plugin.json` name the author as `zotero-word-live-citations contributors`. You may put your own name or organisation there instead.
-   - `skills/zotero-word-live-citations/scripts/_common.py` sets `USER_AGENT = "zotero-word-live-citations/1.0"`. OpenAlex and Crossref recommend a user agent that points to the project, so you may append the repository URL once it exists, e.g. `"zotero-word-live-citations/1.0 (+https://github.com/<owner>/zotero-word-live-citations)"`. This is a code change, so the `<owner>` replacement in [step 4](#4-replace-owner) does not cover it. Type the real owner name directly.
+   - `skills/zotero-word-live-citations/scripts/_common.py` sets `USER_AGENT = "zotero-word-live-citations/1.0"`. OpenAlex and Crossref recommend a user agent that points to the project, so you may append the repository URL once it exists, e.g. `"zotero-word-live-citations/1.0 (+https://github.com/<owner>/zotero-word-citation-for-codex-claude)"`. This is a code change, so the `<owner>` replacement in [step 4](#4-replace-owner) does not cover it. Type the real owner name directly.
 
 5. **Docs are consistent.** Both languages exist for every page in `docs/`, and `CHANGELOG.md` has the release date you want.
 
 ## 2. Create an empty repository on GitHub
 
 1. Go to **github.com → New repository**.
-2. Owner: your user or organisation (this is `<owner>`). Name: **`zotero-word-live-citations`**.
+2. Owner: your user or organisation (this is `<owner>`). Name: **`zotero-word-citation-for-codex-claude`**.
 3. Visibility: **Public**.
 4. **Do not** add a README, `.gitignore` or license. The repository already has them, and an initial commit on GitHub would make the first push fail.
 5. Click **Create repository**.
@@ -75,7 +75,7 @@ Work through this list in the repository root before the first push.
 With the GitHub CLI you can do the same from the terminal instead (it creates the repository, adds the remote and pushes in one go):
 
 ```bash
-gh repo create <owner>/zotero-word-live-citations --public --source . --remote origin --push
+gh repo create <owner>/zotero-word-citation-for-codex-claude --public --source . --remote origin --push
 ```
 
 If you use it, skip to [step 4](#4-replace-owner).
@@ -99,7 +99,7 @@ git commit -m "Initial public release v1.0.0"
 Then connect it to GitHub and push:
 
 ```bash
-git remote add origin https://github.com/<owner>/zotero-word-live-citations.git
+git remote add origin https://github.com/<owner>/zotero-word-citation-for-codex-claude.git
 ```
 
 ```bash
@@ -118,21 +118,21 @@ The placeholder `<owner>` appears in these files and lines (excluding this guide
 
 | File | Line | Content |
 |---|---|---|
-| `README.md` | 102 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `README.md` | 120 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `README.zh-CN.md` | 102 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `README.zh-CN.md` | 120 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `CHANGELOG.md` | 53 | `[1.0.0]: https://github.com/<owner>/zotero-word-live-citations/releases/tag/v1.0.0` |
-| `CONTRIBUTING.md` | 15 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` (English) |
-| `CONTRIBUTING.md` | 89 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` (Chinese) |
-| `SECURITY.md` | 26 | `https://github.com/<owner>/zotero-word-live-citations/security/advisories/new` (English) |
-| `SECURITY.md` | 52 | `https://github.com/<owner>/zotero-word-live-citations/security/advisories/new` (Chinese) |
-| `docs/en/installation.md` | 36 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `docs/en/installation.md` | 92 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `docs/en/troubleshooting.md` | 164 | `https://github.com/<owner>/zotero-word-live-citations/issues` |
-| `docs/zh-CN/installation.md` | 38 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `docs/zh-CN/installation.md` | 96 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `docs/zh-CN/troubleshooting.md` | 175 | `https://github.com/<owner>/zotero-word-live-citations/issues` |
+| `README.en.md` | 102 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `README.en.md` | 120 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `README.md` | 102 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `README.md` | 120 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `CHANGELOG.md` | 53 | `[1.0.0]: https://github.com/<owner>/zotero-word-citation-for-codex-claude/releases/tag/v1.0.0` |
+| `CONTRIBUTING.md` | 15 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` (English) |
+| `CONTRIBUTING.md` | 89 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` (Chinese) |
+| `SECURITY.md` | 26 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/security/advisories/new` (English) |
+| `SECURITY.md` | 52 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/security/advisories/new` (Chinese) |
+| `docs/en/installation.md` | 36 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `docs/en/installation.md` | 92 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `docs/en/troubleshooting.md` | 164 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/issues` |
+| `docs/zh-CN/installation.md` | 38 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `docs/zh-CN/installation.md` | 96 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `docs/zh-CN/troubleshooting.md` | 175 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/issues` |
 
 No code, JSON or YAML file contains `<owner>`. Line numbers may shift if you edit the files first. The grep below always gives the current list.
 
@@ -195,11 +195,11 @@ On the repository page, click the gear icon next to **About**:
 Or with the GitHub CLI:
 
 ```bash
-gh repo edit <owner>/zotero-word-live-citations --description "Agent skill for Claude Code and Codex: live, refreshable Zotero citations in Word DOCX"
+gh repo edit <owner>/zotero-word-citation-for-codex-claude --description "Agent skill for Claude Code and Codex: live, refreshable Zotero citations in Word DOCX"
 ```
 
 ```bash
-gh repo edit <owner>/zotero-word-live-citations --add-topic zotero,microsoft-word,docx,citations,bibliography,csl,claude-code,claude-skills,agent-skills,codex,literature-search,pubmed,openalex,crossref
+gh repo edit <owner>/zotero-word-citation-for-codex-claude --add-topic zotero,microsoft-word,docx,citations,bibliography,csl,claude-code,claude-skills,agent-skills,codex,literature-search,pubmed,openalex,crossref
 ```
 
 Recommended settings:
@@ -237,7 +237,7 @@ Test as a new user would, on a clean machine or account if possible.
 **Claude Code marketplace:** in a new Claude Code session:
 
 ```text
-/plugin marketplace add <owner>/zotero-word-live-citations
+/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude
 ```
 
 ```text
@@ -249,11 +249,11 @@ Restart Claude Code, then ask *"Do you have the zotero-word-live-citations skill
 **`install.py` from a fresh clone:**
 
 ```bash
-git clone https://github.com/<owner>/zotero-word-live-citations.git
+git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git
 ```
 
 ```bash
-cd zotero-word-live-citations
+cd zotero-word-citation-for-codex-claude
 ```
 
 ```bash
@@ -277,7 +277,7 @@ Also check that all links in the README and `docs/` work on GitHub (in both lang
 Several community-run lists and directories collect Claude Code plugins, agent skills and Codex skills (for example "awesome" lists on GitHub and marketplace aggregators). If you want more users to find the skill:
 
 1. Find directories that are active and accept submissions. Read their contribution guidelines.
-2. Submit the repository URL `https://github.com/<owner>/zotero-word-live-citations` with a one-line description, e.g. *Live, refreshable Zotero citations in Word DOCX: literature search, Zotero matching, approved imports, field insertion and validation.*
+2. Submit the repository URL `https://github.com/<owner>/zotero-word-citation-for-codex-claude` with a one-line description, e.g. *Live, refreshable Zotero citations in Word DOCX: literature search, Zotero matching, approved imports, field insertion and validation.*
 3. Mention the requirements honestly: Zotero Desktop 7+, Microsoft Word with the Zotero add-in for Refresh, Python ≥ 3.9.
 4. Don't imply any affiliation with Zotero, Microsoft, Anthropic or OpenAI.
 

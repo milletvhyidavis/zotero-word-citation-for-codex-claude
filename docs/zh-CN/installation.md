@@ -1,6 +1,6 @@
 # 安装
 
-[English](../en/installation.md) · [返回 README](../../README.zh-CN.md)
+[English](../en/installation.md) · [返回 README](../../README.md)
 
 ## 目录
 
@@ -35,11 +35,11 @@
 ## 2. 获取代码
 
 ```bash
-git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
+git clone https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude.git
 ```
 
 ```bash
-cd zotero-word-live-citations
+cd zotero-word-citation-for-codex-claude
 ```
 
 没有安装 git？可以在 GitHub 页面点击 **Code → Download ZIP** 下载压缩包并解压。
@@ -93,7 +93,7 @@ python install.py --target both --dry-run
 本仓库同时也是一个 Claude Code 插件市场（`.claude-plugin/marketplace.json`）。在 Claude Code 中输入：
 
 ```text
-/plugin marketplace add milletvhyidavis/zotero-word-live-citations
+/plugin marketplace add milletvhyidavis/zotero-word-citation-for-codex-claude
 ```
 
 ```text

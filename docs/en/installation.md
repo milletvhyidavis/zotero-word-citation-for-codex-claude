@@ -1,6 +1,6 @@
 # Installation
 
-[简体中文](../zh-CN/installation.md) · [Back to README](../../README.md)
+[简体中文](../zh-CN/installation.md) · [Back to README](../../README.en.md)
 
 ## Contents
 
@@ -33,11 +33,11 @@
 ## 2. Get the code
 
 ```bash
-git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
+git clone https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude.git
 ```
 
 ```bash
-cd zotero-word-live-citations
+cd zotero-word-citation-for-codex-claude
 ```
 
 No git? Download the ZIP from the GitHub page (**Code → Download ZIP**) and unpack it.
@@ -89,7 +89,7 @@ When it finishes, `install.py` reminds you to **start a new Claude Code / Codex 
 This repository is also a Claude Code plugin marketplace (`.claude-plugin/marketplace.json`). Inside Claude Code:
 
 ```text
-/plugin marketplace add milletvhyidavis/zotero-word-live-citations
+/plugin marketplace add milletvhyidavis/zotero-word-citation-for-codex-claude
 ```
 
 ```text

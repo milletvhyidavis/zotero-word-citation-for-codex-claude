@@ -1,6 +1,6 @@
 # Usage guide
 
-[简体中文](../zh-CN/usage.md) · [Back to README](../../README.md)
+[简体中文](../zh-CN/usage.md) · [Back to README](../../README.en.md)
 
 This guide walks through the whole workflow, script by script: what each step does, which flags matter, what it writes, and what you have to check yourself. You normally never type these commands, because the agent runs them for you. It still helps to know them. You can then review what the agent did, re-run a step by hand, or use the scripts without an agent at all.
 

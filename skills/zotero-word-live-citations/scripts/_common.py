@@ -22,7 +22,7 @@ from typing import Any
 DEFAULT_BASE_URL = os.environ.get("ZOTERO_LOCAL_BASE_URL", "http://127.0.0.1:23119")
 API_VERSION_HEADERS = {"Zotero-API-Version": "3"}
 CONNECTOR_HEADERS = {"X-Zotero-Connector-API-Version": "3"}
-USER_AGENT = "zotero-word-live-citations/1.0 (+https://github.com/milletvhyidavis/zotero-word-live-citations)"
+USER_AGENT = "zotero-word-live-citations/1.0 (+https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude)"
 
 EXIT_OK = 0
 EXIT_FAIL = 1

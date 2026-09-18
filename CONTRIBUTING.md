@@ -1,80 +1,6 @@
-# Contributing · 贡献指南
+# 贡献指南 · Contributing
 
-[English](#english) · [简体中文](#简体中文)
-
-## English
-
-Thanks for helping! Bug reports, documentation fixes, new style aliases, better matching heuristics and test cases are all welcome.
-
-### Development setup
-
-1. Install Python ≥ 3.9. No other packages are needed or allowed at runtime.
-2. Clone the repository:
-
-   ```bash
-   git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
-   ```
-
-   ```bash
-   cd zotero-word-live-citations
-   ```
-
-3. Run the tests from the tests folder:
-
-   ```bash
-   cd skills/zotero-word-live-citations/tests
-   ```
-
-   ```bash
-   python -m unittest discover
-   ```
-
-   Expected: `Ran 38 tests … OK` (the number grows as tests are added). The tests are offline. They use fixtures and a fake Zotero library and need neither Zotero, Word nor the internet.
-
-4. For manual end-to-end checks, install your working copy into a project folder so you don't disturb your personal install:
-
-   ```bash
-   python install.py --target claude --project ./sandbox
-   ```
-
-   Then run `python skills/zotero-word-live-citations/scripts/selftest.py` with Zotero running. Use a **dedicated test collection** in Zotero for any import tests.
-
-### Rules that must never break
-
-These rules are the reason people can trust the skill with their manuscripts and libraries. PRs that weaken them will not be merged.
-
-1. **Standard library only.** No third-party imports and no `pip install`, in scripts or at runtime. The skill never installs anything on the user's machine.
-2. **Never overwrite the input DOCX.** The output is a separate file, and `inputUnchanged` must stay verifiable.
-3. **No Zotero write without explicit approval.** Imports need `--yes` and should be used with `--expect-target`. No editing, moving, merging or deleting items, and no changing Zotero preferences.
-4. **Never guess identity.** Ambiguous matches go to the user. Never fabricate item keys, URIs, DOIs or references. URIs come only from the item's own `library` object.
-5. **Parent items only.** Never cite attachments, notes or annotations.
-6. **Never synthesize** `formattedCitation` / `plainCitation`. Never present plain text or ordinary Word fields as Zotero citations.
-7. **Preserve existing content:** existing Zotero fields, bibliography and document preferences must survive, and non-target DOCX parts are copied byte-for-byte.
-8. **Never run Zotero Refresh automatically.**
-9. **Keep the three results separate:** structural validation, Word rendering and Zotero Refresh.
-10. **Exit codes:** 0 success · 1 validation failure, or unresolved references in `resolve_references.py` (outputs still written) · 2 usage/environment error, including an unknown `[@…]` marker in `insert_zotero_fields.py` (nothing written).
-
-### Style
-
-- Python 3.9-compatible syntax (use `from __future__ import annotations` for modern type hints).
-- Every script keeps a helpful module docstring and `--help`. If you add or change a flag, update `SKILL.md`/`references/` **and** `docs/en` + `docs/zh-CN`.
-- UTF-8 everywhere (`utf8_stdio()` for console output; read JSON with `utf-8-sig`).
-- Keep `SKILL.md` short. Details belong in `references/`.
-
-### Pull request checklist
-
-- [ ] `python -m unittest discover` passes in `skills/zotero-word-live-citations/tests`
-- [ ] New behaviour has a test (fixtures instead of network/Zotero)
-- [ ] No third-party dependencies added
-- [ ] None of the "never break" rules weakened
-- [ ] `--help` text, `SKILL.md`/`references/` and both language versions of the docs updated
-- [ ] `CHANGELOG.md` entry under an "Unreleased" heading (English + Chinese)
-- [ ] No personal data in code, fixtures, docs or screenshots (Zotero user IDs, e-mail addresses, private collection names, manuscripts)
-- [ ] Commits and PR description explain *why*, not only *what*
-
-### Reporting bugs
-
-Open an issue with OS, Python/Zotero/Word versions, `selftest.py --json` output, the exact command and error. Security problems: see [SECURITY.md](SECURITY.md).
+[简体中文](#简体中文) · [English](#english)
 
 ## 简体中文
 
@@ -86,11 +12,11 @@ Open an issue with OS, Python/Zotero/Word versions, `selftest.py --json` output,
 2. 克隆仓库：
 
    ```bash
-   git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
+   git clone https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude.git
    ```
 
    ```bash
-   cd zotero-word-live-citations
+   cd zotero-word-citation-for-codex-claude
    ```
 
 3. 进入测试目录运行测试：
@@ -149,3 +75,77 @@ Open an issue with OS, Python/Zotero/Word versions, `selftest.py --json` output,
 ### 报告 bug
 
 提交 issue 时请写明操作系统、Python / Zotero / Word 版本、`selftest.py --json` 的输出，以及出错的完整命令和错误信息。安全问题请参阅 [SECURITY.md](SECURITY.md)。
+
+## English
+
+Thanks for helping! Bug reports, documentation fixes, new style aliases, better matching heuristics and test cases are all welcome.
+
+### Development setup
+
+1. Install Python ≥ 3.9. No other packages are needed or allowed at runtime.
+2. Clone the repository:
+
+   ```bash
+   git clone https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude.git
+   ```
+
+   ```bash
+   cd zotero-word-citation-for-codex-claude
+   ```
+
+3. Run the tests from the tests folder:
+
+   ```bash
+   cd skills/zotero-word-live-citations/tests
+   ```
+
+   ```bash
+   python -m unittest discover
+   ```
+
+   Expected: `Ran 38 tests … OK` (the number grows as tests are added). The tests are offline. They use fixtures and a fake Zotero library and need neither Zotero, Word nor the internet.
+
+4. For manual end-to-end checks, install your working copy into a project folder so you don't disturb your personal install:
+
+   ```bash
+   python install.py --target claude --project ./sandbox
+   ```
+
+   Then run `python skills/zotero-word-live-citations/scripts/selftest.py` with Zotero running. Use a **dedicated test collection** in Zotero for any import tests.
+
+### Rules that must never break
+
+These rules are the reason people can trust the skill with their manuscripts and libraries. PRs that weaken them will not be merged.
+
+1. **Standard library only.** No third-party imports and no `pip install`, in scripts or at runtime. The skill never installs anything on the user's machine.
+2. **Never overwrite the input DOCX.** The output is a separate file, and `inputUnchanged` must stay verifiable.
+3. **No Zotero write without explicit approval.** Imports need `--yes` and should be used with `--expect-target`. No editing, moving, merging or deleting items, and no changing Zotero preferences.
+4. **Never guess identity.** Ambiguous matches go to the user. Never fabricate item keys, URIs, DOIs or references. URIs come only from the item's own `library` object.
+5. **Parent items only.** Never cite attachments, notes or annotations.
+6. **Never synthesize** `formattedCitation` / `plainCitation`. Never present plain text or ordinary Word fields as Zotero citations.
+7. **Preserve existing content:** existing Zotero fields, bibliography and document preferences must survive, and non-target DOCX parts are copied byte-for-byte.
+8. **Never run Zotero Refresh automatically.**
+9. **Keep the three results separate:** structural validation, Word rendering and Zotero Refresh.
+10. **Exit codes:** 0 success · 1 validation failure, or unresolved references in `resolve_references.py` (outputs still written) · 2 usage/environment error, including an unknown `[@…]` marker in `insert_zotero_fields.py` (nothing written).
+
+### Style
+
+- Python 3.9-compatible syntax (use `from __future__ import annotations` for modern type hints).
+- Every script keeps a helpful module docstring and `--help`. If you add or change a flag, update `SKILL.md`/`references/` **and** `docs/en` + `docs/zh-CN`.
+- UTF-8 everywhere (`utf8_stdio()` for console output; read JSON with `utf-8-sig`).
+- Keep `SKILL.md` short. Details belong in `references/`.
+
+### Pull request checklist
+
+- [ ] `python -m unittest discover` passes in `skills/zotero-word-live-citations/tests`
+- [ ] New behaviour has a test (fixtures instead of network/Zotero)
+- [ ] No third-party dependencies added
+- [ ] None of the "never break" rules weakened
+- [ ] `--help` text, `SKILL.md`/`references/` and both language versions of the docs updated
+- [ ] `CHANGELOG.md` entry under an "Unreleased" heading (English + Chinese)
+- [ ] No personal data in code, fixtures, docs or screenshots (Zotero user IDs, e-mail addresses, private collection names, manuscripts)
+- [ ] Commits and PR description explain *why*, not only *what*
+
+### Reporting bugs
+
+Open an issue with OS, Python/Zotero/Word versions, `selftest.py --json` output, the exact command and error. Security problems: see [SECURITY.md](SECURITY.md).

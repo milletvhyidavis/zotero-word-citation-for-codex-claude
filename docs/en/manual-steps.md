@@ -1,6 +1,6 @@
 # Manual steps: what only you can do
 
-[简体中文](../zh-CN/manual-steps.md) · [Back to README](../../README.md)
+[简体中文](../zh-CN/manual-steps.md) · [Back to README](../../README.en.md)
 
 The agent automates searching, matching, file building, field insertion and validation. A few actions are **deliberately left to you**. Some need software the skill will not install. Some change your Zotero library. Some are scientific judgements. And Zotero Refresh only runs inside Word. This page lists every one of them in the order you will meet them, with why each matters and exactly how to do it.
 

@@ -1,6 +1,6 @@
 # 手动步骤：只有你能完成的事
 
-[English](../en/manual-steps.md) · [返回 README](../../README.zh-CN.md)
+[English](../en/manual-steps.md) · [返回 README](../../README.md)
 
 检索、匹配、生成文件、写入引用域和验证，都由 agent 自动完成。但有几件事是**有意留给你亲自做的**：有的需要安装软件，而本技能不会替你安装；有的会改动你的 Zotero 文库；有的属于学术判断；Zotero Refresh 则只能在 Word 里运行。本页按你遇到它们的先后顺序逐一列出，并说明每一步为什么重要、具体怎么做。
 

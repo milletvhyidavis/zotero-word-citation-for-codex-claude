@@ -1,6 +1,6 @@
 # FAQ
 
-[简体中文](../zh-CN/faq.md) · [Back to README](../../README.md)
+[简体中文](../zh-CN/faq.md) · [Back to README](../../README.en.md)
 
 ## Contents
 

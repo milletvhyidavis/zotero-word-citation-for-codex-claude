@@ -1,32 +1,6 @@
-# Security Policy · 安全策略
+# 安全策略 · Security Policy
 
-[English](#english) · [简体中文](#简体中文)
-
-## English
-
-### Security model
-
-- **Zotero access is local only.** The scripts talk to Zotero Desktop at `http://127.0.0.1:23119` (override: `ZOTERO_LOCAL_BASE_URL` / `--base-url`). The local API and connector only listen on the loopback interface. No Zotero web API key, account password or other credential is used, requested or stored.
-- **Reads by default, one approval-gated write.** The only operation that changes Zotero is `zotero_local.py import-ris|import-bibtex`. It refuses without `--yes`, refuses non-editable targets, and with `--expect-target` refuses if the selected collection differs. The skill never edits, moves, merges or deletes Zotero items and never changes Zotero preferences.
-- **Documents.** The input DOCX is never overwritten. Output is written to a temporary file and then moved into place. ZIP part names are checked for unsafe paths during validation.
-- **Network.** Only `search_literature.py` uses the internet, calling `api.openalex.org`, `eutils.ncbi.nlm.nih.gov` and `api.crossref.org` over HTTPS. Your search queries, plus `ZWLC_MAILTO` (Crossref/OpenAlex) and `NCBI_API_KEY` (NCBI) if you set them, are sent to these services. **Do not put confidential manuscript text into search queries.** There is no telemetry.
-- **Word rendering** (`word_render.py`, Windows) runs a fixed PowerShell script that opens a temporary read-only copy of the document in Word via COM and closes it without saving.
-- **No dependencies.** Python standard library only. Nothing is downloaded or installed.
-
-### Supported versions
-
-| Version | Supported |
-|---|---|
-| 1.0.x | yes |
-
-### Reporting a vulnerability
-
-Please **do not open a public issue** for security problems.
-
-1. Preferably use GitHub's private vulnerability reporting: `https://github.com/milletvhyidavis/zotero-word-live-citations/security/advisories/new` (repository → **Security** → **Report a vulnerability**).
-2. If that is unavailable, open a minimal public issue asking a maintainer for a private contact channel, without technical details.
-
-Include the affected version, OS, a description, reproduction steps and the impact. Remove personal data and confidential documents. We aim to acknowledge reports within 7 days and to publish a fix or mitigation as soon as practical, crediting reporters who wish to be named.
+[简体中文](#简体中文) · [English](#english)
 
 ## 简体中文
 
@@ -49,7 +23,33 @@ Include the affected version, OS, a description, reproduction steps and the impa
 
 安全问题请**不要提交公开 issue**。
 
-1. 首选 GitHub 的私密漏洞报告：`https://github.com/milletvhyidavis/zotero-word-live-citations/security/advisories/new`（仓库 → **Security** → **Report a vulnerability**）。
+1. 首选 GitHub 的私密漏洞报告：`https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude/security/advisories/new`（仓库 → **Security** → **Report a vulnerability**）。
 2. 如果该功能不可用，可以提交一个简短的公开 issue，请维护者提供私下联系方式，但不要写任何技术细节。
 
 报告中请写明受影响的版本、操作系统、问题描述、复现步骤和影响范围，并删去个人信息和保密文档。我们会尽量在 7 天内确认收到，并尽快发布修复或缓解措施；如果你愿意署名，我们会在致谢中注明。
+
+## English
+
+### Security model
+
+- **Zotero access is local only.** The scripts talk to Zotero Desktop at `http://127.0.0.1:23119` (override: `ZOTERO_LOCAL_BASE_URL` / `--base-url`). The local API and connector only listen on the loopback interface. No Zotero web API key, account password or other credential is used, requested or stored.
+- **Reads by default, one approval-gated write.** The only operation that changes Zotero is `zotero_local.py import-ris|import-bibtex`. It refuses without `--yes`, refuses non-editable targets, and with `--expect-target` refuses if the selected collection differs. The skill never edits, moves, merges or deletes Zotero items and never changes Zotero preferences.
+- **Documents.** The input DOCX is never overwritten. Output is written to a temporary file and then moved into place. ZIP part names are checked for unsafe paths during validation.
+- **Network.** Only `search_literature.py` uses the internet, calling `api.openalex.org`, `eutils.ncbi.nlm.nih.gov` and `api.crossref.org` over HTTPS. Your search queries, plus `ZWLC_MAILTO` (Crossref/OpenAlex) and `NCBI_API_KEY` (NCBI) if you set them, are sent to these services. **Do not put confidential manuscript text into search queries.** There is no telemetry.
+- **Word rendering** (`word_render.py`, Windows) runs a fixed PowerShell script that opens a temporary read-only copy of the document in Word via COM and closes it without saving.
+- **No dependencies.** Python standard library only. Nothing is downloaded or installed.
+
+### Supported versions
+
+| Version | Supported |
+|---|---|
+| 1.0.x | yes |
+
+### Reporting a vulnerability
+
+Please **do not open a public issue** for security problems.
+
+1. Preferably use GitHub's private vulnerability reporting: `https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude/security/advisories/new` (repository → **Security** → **Report a vulnerability**).
+2. If that is unavailable, open a minimal public issue asking a maintainer for a private contact channel, without technical details.
+
+Include the affected version, OS, a description, reproduction steps and the impact. Remove personal data and confidential documents. We aim to acknowledge reports within 7 days and to publish a fix or mitigation as soon as practical, crediting reporters who wish to be named.

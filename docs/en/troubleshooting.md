@@ -1,6 +1,6 @@
 # Troubleshooting
 
-[简体中文](../zh-CN/troubleshooting.md) · [Back to README](../../README.md)
+[简体中文](../zh-CN/troubleshooting.md) · [Back to README](../../README.en.md)
 
 Each table lists **symptom → cause → fix**. Start with the self-test. It usually points straight at the problem:
 
@@ -161,7 +161,7 @@ Network access is only needed for literature search. Matching, importing, insert
 
 ## Still stuck?
 
-Open an issue at `https://github.com/milletvhyidavis/zotero-word-live-citations/issues` with:
+Open an issue at `https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude/issues` with:
 
 - OS, Python, Zotero and Word versions
 - `selftest.py --json` output (it contains no library contents)

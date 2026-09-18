@@ -1,6 +1,6 @@
 # 常见问题
 
-[English](../en/faq.md) · [返回 README](../../README.zh-CN.md)
+[English](../en/faq.md) · [返回 README](../../README.md)
 
 ## 目录
 

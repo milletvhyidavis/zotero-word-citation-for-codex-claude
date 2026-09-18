@@ -1,6 +1,6 @@
 # 使用指南
 
-[English](../en/usage.md) · [返回 README](../../README.zh-CN.md)
+[English](../en/usage.md) · [返回 README](../../README.md)
 
 本指南按脚本逐一讲解整个流程：每一步做什么、哪些参数要紧、会写出什么文件、哪些地方需要你亲自检查。这些命令通常不需要你手动输入，agent 会替你运行，但了解它们仍然有用：你可以核查 agent 做了什么，手动重跑某一步，或者完全不借助 agent 直接使用这些脚本。
 

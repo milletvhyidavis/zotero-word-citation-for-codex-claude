@@ -1,6 +1,6 @@
 # 故障排查
 
-[English](../en/troubleshooting.md) · [返回 README](../../README.zh-CN.md)
+[English](../en/troubleshooting.md) · [返回 README](../../README.md)
 
 下面每张表都按 **现象 → 原因 → 解决办法** 排列。遇到问题请先运行自检，它通常能直接指出问题所在：
 
@@ -172,7 +172,7 @@ python "$S/selftest.py"
 <a id="still-stuck"></a>
 ## 仍未解决？
 
-请到 `https://github.com/milletvhyidavis/zotero-word-live-citations/issues` 提交 issue，并附上：
+请到 `https://github.com/milletvhyidavis/zotero-word-citation-for-codex-claude/issues` 提交 issue，并附上：
 
 - 操作系统、Python、Zotero 和 Word 的版本
 - `selftest.py --json` 的输出（其中不含文库内容）

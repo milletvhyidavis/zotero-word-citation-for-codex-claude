@@ -1,11 +1,11 @@
 # 发布指南（面向维护者）
 
-[English](../en/publishing.md) · [返回 README](../../README.zh-CN.md)
+[English](../en/publishing.md) · [返回 README](../../README.md)
 
 本页写给负责把仓库发布到 GitHub 的人。技能的普通用户不需要阅读。
 
 > [!IMPORTANT]
-> **关于 `<owner>`。** 文档中所有 GitHub 地址和插件市场命令，都用占位符 **`<owner>`** 表示将来拥有该仓库的 GitHub 用户或组织，例如 `https://github.com/<owner>/zotero-word-live-citations`。这样做是为了在确定所有者之后一次性替换（见[第 4 步](#replace-owner)）。本指南本身保留 `<owner>` 占位符，不参与替换。
+> **关于 `<owner>`。** 文档中所有 GitHub 地址和插件市场命令，都用占位符 **`<owner>`** 表示将来拥有该仓库的 GitHub 用户或组织，例如 `https://github.com/<owner>/zotero-word-citation-for-codex-claude`。这样做是为了在确定所有者之后一次性替换（见[第 4 步](#replace-owner)）。本指南本身保留 `<owner>` 占位符，不参与替换。
 
 ## 目录
 
@@ -61,7 +61,7 @@
 
 4. **可选的个性化设置**（这些是代码或元数据文件，任何改动请自行审阅）：
    - `LICENSE`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json` 和 `.codex-plugin/plugin.json` 中的作者名是 `zotero-word-live-citations contributors`。你也可以改成自己的名字或组织名。
-   - `skills/zotero-word-live-citations/scripts/_common.py` 中设置了 `USER_AGENT = "zotero-word-live-citations/1.0"`。OpenAlex 和 Crossref 建议 User-Agent 指向项目主页，因此仓库建好后可以在后面加上仓库地址，例如 `"zotero-word-live-citations/1.0 (+https://github.com/<owner>/zotero-word-live-citations)"`。这属于代码改动，[第 4 步](#replace-owner)的 `<owner>` 批量替换不会处理它，请直接写入真实的所有者名称。
+   - `skills/zotero-word-live-citations/scripts/_common.py` 中设置了 `USER_AGENT = "zotero-word-live-citations/1.0"`。OpenAlex 和 Crossref 建议 User-Agent 指向项目主页，因此仓库建好后可以在后面加上仓库地址，例如 `"zotero-word-live-citations/1.0 (+https://github.com/<owner>/zotero-word-citation-for-codex-claude)"`。这属于代码改动，[第 4 步](#replace-owner)的 `<owner>` 批量替换不会处理它，请直接写入真实的所有者名称。
 
 5. **文档一致。** `docs/` 中每一页都有中英两个版本，`CHANGELOG.md` 中的发布日期符合你的预期。
 
@@ -69,7 +69,7 @@
 ## 2. 在 GitHub 上新建空仓库
 
 1. 打开 **github.com → New repository**。
-2. Owner：你的用户或组织（也就是 `<owner>`）。仓库名：**`zotero-word-live-citations`**。
+2. Owner：你的用户或组织（也就是 `<owner>`）。仓库名：**`zotero-word-citation-for-codex-claude`**。
 3. 可见性：**Public**。
 4. **不要**勾选添加 README、`.gitignore` 或许可证。仓库里已经有这些文件；如果在 GitHub 上生成了初始提交，第一次推送会失败。
 5. 点击 **Create repository**。
@@ -77,7 +77,7 @@
 也可以改用 GitHub CLI 在终端完成同样的操作（一次性创建仓库、添加远程地址并推送）：
 
 ```bash
-gh repo create <owner>/zotero-word-live-citations --public --source . --remote origin --push
+gh repo create <owner>/zotero-word-citation-for-codex-claude --public --source . --remote origin --push
 ```
 
 如果用了这条命令，可以直接跳到[第 4 步](#replace-owner)。
@@ -102,7 +102,7 @@ git commit -m "Initial public release v1.0.0"
 然后关联 GitHub 并推送：
 
 ```bash
-git remote add origin https://github.com/<owner>/zotero-word-live-citations.git
+git remote add origin https://github.com/<owner>/zotero-word-citation-for-codex-claude.git
 ```
 
 ```bash
@@ -122,21 +122,21 @@ git push -u origin main
 
 | 文件 | 行号 | 内容 |
 |---|---|---|
-| `README.md` | 102 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `README.md` | 120 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `README.zh-CN.md` | 102 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `README.zh-CN.md` | 120 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `CHANGELOG.md` | 53 | `[1.0.0]: https://github.com/<owner>/zotero-word-live-citations/releases/tag/v1.0.0` |
-| `CONTRIBUTING.md` | 15 | `git clone https://github.com/<owner>/zotero-word-live-citations.git`（英文部分） |
-| `CONTRIBUTING.md` | 89 | `git clone https://github.com/<owner>/zotero-word-live-citations.git`（中文部分） |
-| `SECURITY.md` | 26 | `https://github.com/<owner>/zotero-word-live-citations/security/advisories/new`（英文部分） |
-| `SECURITY.md` | 52 | `https://github.com/<owner>/zotero-word-live-citations/security/advisories/new`（中文部分） |
-| `docs/en/installation.md` | 36 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `docs/en/installation.md` | 92 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `docs/en/troubleshooting.md` | 164 | `https://github.com/<owner>/zotero-word-live-citations/issues` |
-| `docs/zh-CN/installation.md` | 38 | `git clone https://github.com/<owner>/zotero-word-live-citations.git` |
-| `docs/zh-CN/installation.md` | 96 | `/plugin marketplace add <owner>/zotero-word-live-citations` |
-| `docs/zh-CN/troubleshooting.md` | 175 | `https://github.com/<owner>/zotero-word-live-citations/issues` |
+| `README.en.md` | 102 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `README.en.md` | 120 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `README.md` | 102 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `README.md` | 120 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `CHANGELOG.md` | 53 | `[1.0.0]: https://github.com/<owner>/zotero-word-citation-for-codex-claude/releases/tag/v1.0.0` |
+| `CONTRIBUTING.md` | 15 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git`（英文部分） |
+| `CONTRIBUTING.md` | 89 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git`（中文部分） |
+| `SECURITY.md` | 26 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/security/advisories/new`（英文部分） |
+| `SECURITY.md` | 52 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/security/advisories/new`（中文部分） |
+| `docs/en/installation.md` | 36 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `docs/en/installation.md` | 92 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `docs/en/troubleshooting.md` | 164 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/issues` |
+| `docs/zh-CN/installation.md` | 38 | `git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git` |
+| `docs/zh-CN/installation.md` | 96 | `/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude` |
+| `docs/zh-CN/troubleshooting.md` | 175 | `https://github.com/<owner>/zotero-word-citation-for-codex-claude/issues` |
 
 代码、JSON 和 YAML 文件中都没有 `<owner>`。如果你先改动过这些文件，行号可能会变化，以下面 grep 命令的实时结果为准。
 
@@ -200,11 +200,11 @@ git push
 或者使用 GitHub CLI：
 
 ```bash
-gh repo edit <owner>/zotero-word-live-citations --description "Agent skill for Claude Code and Codex: live, refreshable Zotero citations in Word DOCX"
+gh repo edit <owner>/zotero-word-citation-for-codex-claude --description "Agent skill for Claude Code and Codex: live, refreshable Zotero citations in Word DOCX"
 ```
 
 ```bash
-gh repo edit <owner>/zotero-word-live-citations --add-topic zotero,microsoft-word,docx,citations,bibliography,csl,claude-code,claude-skills,agent-skills,codex,literature-search,pubmed,openalex,crossref
+gh repo edit <owner>/zotero-word-citation-for-codex-claude --add-topic zotero,microsoft-word,docx,citations,bibliography,csl,claude-code,claude-skills,agent-skills,codex,literature-search,pubmed,openalex,crossref
 ```
 
 建议的设置：
@@ -244,7 +244,7 @@ gh release create v1.0.0 --title "v1.0.0" --notes-file ../release-notes-1.0.0.md
 **Claude Code 插件市场：** 在新的 Claude Code 会话中输入：
 
 ```text
-/plugin marketplace add <owner>/zotero-word-live-citations
+/plugin marketplace add <owner>/zotero-word-citation-for-codex-claude
 ```
 
 ```text
@@ -256,11 +256,11 @@ gh release create v1.0.0 --title "v1.0.0" --notes-file ../release-notes-1.0.0.md
 **从全新克隆使用 `install.py`：**
 
 ```bash
-git clone https://github.com/<owner>/zotero-word-live-citations.git
+git clone https://github.com/<owner>/zotero-word-citation-for-codex-claude.git
 ```
 
 ```bash
-cd zotero-word-live-citations
+cd zotero-word-citation-for-codex-claude
 ```
 
 ```bash
@@ -285,7 +285,7 @@ python ~/.claude/skills/zotero-word-live-citations/scripts/selftest.py
 有一些由社区维护的列表和目录网站会收录 Claude Code 插件、agent 技能和 Codex 技能（例如 GitHub 上的各种 “awesome” 列表和插件市场聚合站）。如果希望更多人发现这个技能：
 
 1. 找到仍在活跃维护、接受投稿的目录，阅读其投稿说明。
-2. 提交仓库地址 `https://github.com/<owner>/zotero-word-live-citations`，附上一句话简介，例如 *Live, refreshable Zotero citations in Word DOCX: literature search, Zotero matching, approved imports, field insertion and validation.*
+2. 提交仓库地址 `https://github.com/<owner>/zotero-word-citation-for-codex-claude`，附上一句话简介，例如 *Live, refreshable Zotero citations in Word DOCX: literature search, Zotero matching, approved imports, field insertion and validation.*
 3. 如实说明使用条件：Zotero 桌面版 7+、Refresh 需要装有 Zotero 插件的 Microsoft Word、Python ≥ 3.9。
 4. 不要暗示与 Zotero、Microsoft、Anthropic 或 OpenAI 有任何隶属关系。
 
