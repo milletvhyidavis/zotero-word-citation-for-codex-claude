@@ -41,7 +41,7 @@ Written after the heading paragraph given by `--bibliography-heading` (created a
 
 ## Document preferences
 
-Stored as custom document properties `ZOTERO_PREF_1..n` in `docProps/custom.xml` (value chunks ≤ 255 chars, concatenated in order). This format was accepted by Zotero 10.0.2 + Word 16 Refresh in earlier manual runs (re-confirm after Zotero upgrades):
+Stored as custom document properties `ZOTERO_PREF_1..n` in `docProps/custom.xml` (value chunks ≤ 255 chars, concatenated in order). This format was verified end to end with Zotero 10.0.2 + Word 16 (Microsoft 365): Zotero → Refresh accepted the prefs and reformatted all citations and the bibliography (re-check after Zotero upgrades):
 
 ```xml
 <data data-version="3" zotero-version="10.0.2"><session id="Ab12Cd34"/>

@@ -2,7 +2,7 @@
   "name": "zotero-word-live-citations",
   "version": "1.0.0",
   "description": "Find papers, match them to your Zotero Desktop library, import missing items with approval, and write live, refreshable Zotero citation/bibliography fields into Word DOCX files.",
-  "author": { "name": "codex-zotero-wordcitation contributors" },
+  "author": { "name": "zotero-word-live-citations contributors" },
   "license": "MIT",
   "keywords": ["zotero", "word", "docx", "citations", "bibliography", "literature-search"]
 }

@@ -52,4 +52,4 @@ Look at every PDF page when rendering (headings, citations, bibliography, tables
 
 ## Exit codes (all scripts)
 
-0 success · 1 validation failure / unresolved items (outputs are still written) · 2 usage or environment error.
+0 success · 1 validation failure, or unresolved references in `resolve_references.py` (the map is still written) · 2 usage or environment error — including a `[@…]` marker in `insert_zotero_fields.py` that names an unknown ref (nothing is written).

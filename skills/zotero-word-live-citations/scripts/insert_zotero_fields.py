@@ -502,7 +502,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         raise UsageError(f"input not found: {src}")
     if src == out:
         raise UsageError("output must differ from input (refusing to overwrite the original)")
-    if out.exists() and not args.force:
+    if out.exists() and not args.force and not args.list_paragraphs:
         raise UsageError(f"output exists: {out} (use --force to replace it)")
     if not args.placements and not args.placeholders and not args.list_paragraphs \
             and not args.bibliography_heading:

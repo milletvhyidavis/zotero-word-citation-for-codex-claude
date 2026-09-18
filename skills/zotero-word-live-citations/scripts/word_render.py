@@ -6,7 +6,7 @@ fields Word itself parsed (total / ZOTERO_ITEM / ZOTERO_BIBL) and the page
 count, exports a PDF, and closes without saving. The DOCX is never modified
 and Zotero Refresh is NOT run - rendering is not proof that Refresh works.
 
-  word_render.py document.docx --pdf document.pdf [--json]
+  word_render.py document.docx --pdf document.pdf
 
 Exit code: 0 rendered, 1 Word failed, 2 Word/PowerShell unavailable.
 """
@@ -64,6 +64,19 @@ def find_word() -> str | None:
             exe = Path(base) / sub / "WINWORD.EXE"
             if exe.is_file():
                 return str(exe)
+    try:  # any other install location registers itself under App Paths
+        import winreg
+
+        for hive in (winreg.HKEY_LOCAL_MACHINE, winreg.HKEY_CURRENT_USER):
+            try:
+                with winreg.OpenKey(hive, r"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\Winword.exe") as key:
+                    exe = Path(winreg.QueryValue(key, None))
+                if exe.is_file():
+                    return str(exe)
+            except OSError:
+                continue
+    except ImportError:
+        pass
     return None
 
 
