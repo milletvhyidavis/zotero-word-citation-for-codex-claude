@@ -23,7 +23,7 @@
 
 Please **do not open a public issue** for security problems.
 
-1. Preferably use GitHub's private vulnerability reporting: `https://github.com/<owner>/zotero-word-live-citations/security/advisories/new` (repository → **Security** → **Report a vulnerability**).
+1. Preferably use GitHub's private vulnerability reporting: `https://github.com/milletvhyidavis/zotero-word-live-citations/security/advisories/new` (repository → **Security** → **Report a vulnerability**).
 2. If that is unavailable, open a minimal public issue asking a maintainer for a private contact channel, without technical details.
 
 Include the affected version, OS, a description, reproduction steps and the impact. Remove personal data and confidential documents. We aim to acknowledge reports within 7 days and to publish a fix or mitigation as soon as practical, crediting reporters who wish to be named.
@@ -49,7 +49,7 @@ Include the affected version, OS, a description, reproduction steps and the impa
 
 安全问题请**不要提交公开 issue**。
 
-1. 首选 GitHub 的私密漏洞报告：`https://github.com/<owner>/zotero-word-live-citations/security/advisories/new`（仓库 → **Security** → **Report a vulnerability**）。
+1. 首选 GitHub 的私密漏洞报告：`https://github.com/milletvhyidavis/zotero-word-live-citations/security/advisories/new`（仓库 → **Security** → **Report a vulnerability**）。
 2. 如果该功能不可用，可以提交一个简短的公开 issue，请维护者提供私下联系方式，但不要写任何技术细节。
 
 报告中请写明受影响的版本、操作系统、问题描述、复现步骤和影响范围，并删去个人信息和保密文档。我们会尽量在 7 天内确认收到，并尽快发布修复或缓解措施；如果你愿意署名，我们会在致谢中注明。

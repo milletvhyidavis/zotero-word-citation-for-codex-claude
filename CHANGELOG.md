@@ -78,4 +78,4 @@ Initial public release. · 首个公开版本。
 
 - 在 Windows 11 + Zotero 10.0.2 + Word 16（Microsoft 365）+ Zotero Word 插件环境下完成端到端测试：18 篇文献经用户批准后导入并全部按 DOI 匹配成功，生成 17 个引用域和参考文献表，样式为 GB/T 7714-2015 顺序编码制（zh-CN）。结构验证通过，Word 渲染通过，**用户在 Word 中执行 Zotero Refresh 成功**。
 
-[1.0.0]: https://github.com/<owner>/zotero-word-live-citations/releases/tag/v1.0.0
+[1.0.0]: https://github.com/milletvhyidavis/zotero-word-live-citations/releases/tag/v1.0.0

@@ -103,7 +103,7 @@ Rectangles are automatic. **Yellow hexagons are human actions.**
 ### 1. Get the code
 
 ```bash
-git clone https://github.com/<owner>/zotero-word-live-citations.git
+git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
 ```
 
 ```bash
@@ -121,7 +121,7 @@ python install.py --target claude
 Or via the plugin marketplace, inside Claude Code:
 
 ```text
-/plugin marketplace add <owner>/zotero-word-live-citations
+/plugin marketplace add milletvhyidavis/zotero-word-live-citations
 ```
 
 ```text

@@ -172,7 +172,7 @@ python "$S/selftest.py"
 <a id="still-stuck"></a>
 ## 仍未解决？
 
-请到 `https://github.com/<owner>/zotero-word-live-citations/issues` 提交 issue，并附上：
+请到 `https://github.com/milletvhyidavis/zotero-word-live-citations/issues` 提交 issue，并附上：
 
 - 操作系统、Python、Zotero 和 Word 的版本
 - `selftest.py --json` 的输出（其中不含文库内容）

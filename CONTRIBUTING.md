@@ -12,7 +12,7 @@ Thanks for helping! Bug reports, documentation fixes, new style aliases, better 
 2. Clone the repository:
 
    ```bash
-   git clone https://github.com/<owner>/zotero-word-live-citations.git
+   git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
    ```
 
    ```bash
@@ -86,7 +86,7 @@ Open an issue with OS, Python/Zotero/Word versions, `selftest.py --json` output,
 2. 克隆仓库：
 
    ```bash
-   git clone https://github.com/<owner>/zotero-word-live-citations.git
+   git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
    ```
 
    ```bash

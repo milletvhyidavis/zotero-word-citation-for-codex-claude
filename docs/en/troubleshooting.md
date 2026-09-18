@@ -161,7 +161,7 @@ Network access is only needed for literature search. Matching, importing, insert
 
 ## Still stuck?
 
-Open an issue at `https://github.com/<owner>/zotero-word-live-citations/issues` with:
+Open an issue at `https://github.com/milletvhyidavis/zotero-word-live-citations/issues` with:
 
 - OS, Python, Zotero and Word versions
 - `selftest.py --json` output (it contains no library contents)

@@ -103,7 +103,7 @@ flowchart TD
 ### 1. 获取代码
 
 ```bash
-git clone https://github.com/<owner>/zotero-word-live-citations.git
+git clone https://github.com/milletvhyidavis/zotero-word-live-citations.git
 ```
 
 ```bash
@@ -121,7 +121,7 @@ python install.py --target claude
 或者在 Claude Code 中通过插件市场安装：
 
 ```text
-/plugin marketplace add <owner>/zotero-word-live-citations
+/plugin marketplace add milletvhyidavis/zotero-word-live-citations
 ```
 
 ```text
