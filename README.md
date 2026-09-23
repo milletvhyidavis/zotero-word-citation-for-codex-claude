@@ -4,15 +4,16 @@
 
 让 **Claude Code** 或 **OpenAI Codex** 帮你给 Word 文档加上**真正的 Zotero 引用**。
 
+**不需要compute use！**
+
 你只需要对 agent 说一句“给这篇稿子找文献并加上引用”，它会：
 
 1. 在 PubMed、OpenAlex、Crossref 中查找能支撑你论述的文献；
 2. 在你电脑上的 Zotero 文库里找到对应条目；文库里没有的，**经你同意后**才导入；
-3. 生成一份新的 Word 文档。里面的引用和你用 Zotero 插件手动插入的**完全一样**：可以一键刷新、切换引文格式、继续编辑，而不是一串写死的 `[1]`。
+3. 生成一份新的 Word 文档。里面的引用和你用 Zotero 插件手动插入的**完全一样**：可以一键刷新、切换引文格式、继续编辑，而不是随意修改的 `[1]`。
 
-你的原稿不会被改动。agent 不会替你安装软件，也不会在你不知情的情况下改动 Zotero。
 
-> [!WARNING]
+> [!注意]
 > **只支持 Microsoft Word，不支持 WPS。** 生成的文档一旦用 WPS 打开并保存，引用就会变成普通文字，再也无法刷新。LibreOffice、Pages 同样不支持。
 
 ## 目录
@@ -37,9 +38,9 @@
 | Python 3.9 或更高版本 | 没装也没关系，agent 会一步步教你装 |
 | Zotero 桌面版 7 或更高版本 | 使用过程中需要**一直开着** |
 | Microsoft Word（2016 或 Microsoft 365）+ Zotero Word 插件 | 用来打开、刷新生成的文档 |
-| 网络 | 只有查找文献时需要 |
 
-Windows、macOS、Linux 都能用。唯一的区别是：用 Word 预览生成 PDF 这个可选功能只支持 Windows。
+
+Windows、macOS 都能用。
 
 ### 首次使用要做的设置（只需一次）
 
